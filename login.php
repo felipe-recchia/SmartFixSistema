@@ -37,7 +37,7 @@ $Nome = $_POST['username'] ?? null;
 // echo '<br/>' .$bl_nome;
 // echo '<br/>' .$cla_nome;
 
-if ($usuario && $senha) {
+if ($Nome && $Senha) {
 // Instancia a conexão
 $conexao = (new Conexao())->conectar();
 
