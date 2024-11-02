@@ -11,54 +11,40 @@ CREATE TABLE tb_classificacao (
     PRIMARY KEY (cla_id)
 );
 
+--LeonardoSarruf - 02/11/2024 - Referenciando a tabela sala na tabela maquina
+CREATE TABLE tb_maquina (
+    maq_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
+    maq_num 	VARCHAR(10)        NOT NULL UNIQUE,
+    sl_id     	INT                NOT NULL, 
+    PRIMARY KEY (maq_id),
+    KEY sl_num_maq (sl_id),
+    CONSTRAINT tb_maquina_ibfk_1 FOREIGN KEY (sl_id) 	REFERENCES 	tb_sala(sl_id)
+);
+--Fim - LeonardoSarruf - 02/11/2024 - Referenciando a tabela sala na tabela maquina
+
+--LeonardoSarruf - 02/11/2024 - Referenciando a tabela bloco na tabela sala
+CREATE TABLE tb_sala (
+    sl_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
+    sl_num 		VARCHAR(10)         NOT NULL,
+    bl_id 		INT         		NULL,
+    PRIMARY KEY (sl_id),
+    KEY bl_nome_sala (bl_id),
+    CONSTRAINT tb_sala_ibfk_1 FOREIGN KEY (bl_id) 	REFERENCES 	tb_bloco(bl_id)
+);
+--Fim - LeonardoSarruf - 02/11/2024 - Referenciando a tabela bloco na tabela sala
+
+CREATE TABLE tb_bloco (
+    bl_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
+    bl_nome 	VARCHAR(20)         NULL UNIQUE,
+    bl_departamento VARCHAR(20) 	NULL,
+    PRIMARY KEY (bl_id)
+);
+
 CREATE TABLE tb_itens (
     itm_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
     itm_nome 	VARCHAR(20)         NOT NULL UNIQUE,
     PRIMARY KEY (itm_id)
 );
-
-CREATE TABLE tb_maquina (
-    maq_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,  
-    maq_num 	VARCHAR(10)         NOT NULL UNIQUE,
-    PRIMARY KEY (maq_id)
-);
-
-CREATE TABLE tb_sala (
-    sl_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
-    sl_num 		VARCHAR(10)         NOT NULL UNIQUE,
-    PRIMARY KEY (sl_id)
-);
-
-CREATE TABLE tb_bloco (
-    bl_id 		INT AUTO_INCREMENT  NOT NULL UNIQUE,
-    bl_nome 	VARCHAR(20)         NULL,
-    bl_departamento VARCHAR(20) NULL,
-    PRIMARY KEY (bl_id)
-);
-
-
-CREATE TABLE tb_chamado (
-    cha_id 			    INT AUTO_INCREMENT  NOT NULL UNIQUE,
-    cha_dt_inicio  DATE                 NOT NULL DEFAULT CURRENT_DATE(),
-    cla_nome 		VARCHAR(20)             NOT NULL,				-- fk
-    itm_nome 		VARCHAR(20)             NOT NULL,				-- fk
-    cha_assunto     VARCHAR(50)             NOT NULL,
-    maq_num 		VARCHAR(10)             NULL DEFAULT '0',		-- fk
-    sl_num 			VARCHAR(10)             NOT NULL,				-- fk
-    bl_nome 		VARCHAR(20)             NOT NULL,				-- fk
-    cha_desc 		VARCHAR(300)            NULL,
-    cha_sit 		VARCHAR(20)             NOT NULL DEFAULT 'Aberto',
-    cha_dt_fim 		DATE                  NULL,
-    cha_notes 		VARCHAR(300)          NULL,
-    PRIMARY KEY (cha_id),    
-    
-    FOREIGN KEY (cla_nome) 	REFERENCES 	tb_classificacao(cla_nome),
-    FOREIGN KEY (itm_nome) 	REFERENCES 	tb_itens        (itm_nome),
-    FOREIGN KEY (maq_num) 	REFERENCES 	tb_maquina      (maq_num),
-	FOREIGN KEY (sl_num) 	  REFERENCES  tb_sala         (sl_num),
-    FOREIGN KEY (bl_nome) 	REFERENCES  tb_bloco        (bl_nome)
-);
-
 
 CREATE TABLE tb_administrador (
   adm_id int(11) NOT NULL,
@@ -70,23 +56,51 @@ CREATE TABLE tb_administrador (
 
 CREATE TABLE tb_usuario (
  user_id INT NOT NULL AUTO_INCREMENT,
- user_email varchar(100) NOT NULL unique,
+ user_email varchar(100) NOT NULL,
   PRIMARY KEY (user_id)
 );
 
+--LeonardoSarruf - 02/11/2024 - Chaves Estrangeiras alteradas para Id's
+CREATE TABLE tb_chamado (
+  cha_id 		int(11) 		NOT NULL AUTO_INCREMENT,
+  cha_dt_inicio date 			NOT NULL,
+  cla_id 		int 			NOT NULL,
+  itm_id 		int 			NOT NULL,
+  cha_assunto 	varchar(50) 	NOT NULL,
+  maq_id 		int 			NOT NULL,
+  sl_id 		int 			NOT NULL,
+  bl_id 		int 			NOT NULL,
+  cha_desc 		varchar(300) 	DEFAULT NULL,
+  cha_sit 		varchar(20) 	NOT NULL DEFAULT 'Aberto',
+  cha_dt_fim 	date 			DEFAULT NULL,
+  cha_notes 	varchar(300) 	DEFAULT NULL,
+  PRIMARY KEY (cha_id),
+  UNIQUE KEY 	cha_id 		(cha_id),
+  KEY 			cla_id 	(cla_id),
+  KEY 			itm_id 	(itm_id),
+  KEY 			maq_id 	(maq_id),
+  KEY 			sl_id 		(sl_id),
+  KEY 			bl_id 	(bl_id),
+  CONSTRAINT tb_chamado_ibfk_1 FOREIGN KEY (cla_id) 	REFERENCES tb_classificacao (cla_id),
+  CONSTRAINT tb_chamado_ibfk_2 FOREIGN KEY (itm_id) 	REFERENCES tb_itens (itm_id),
+  CONSTRAINT tb_chamado_ibfk_3 FOREIGN KEY (maq_id) 	REFERENCES tb_maquina (maq_id),
+  CONSTRAINT tb_chamado_ibfk_4 FOREIGN KEY (sl_id) 	REFERENCES tb_sala (sl_id),
+  CONSTRAINT tb_chamado_ibfk_5 FOREIGN KEY (bl_id) 	REFERENCES tb_bloco (bl_id)
+);
+--Fim - LeonardoSarruf - 02/11/2024 - Chaves Estrangeiras alteradas para Id's
 
 -- DML - POPULANDO TABELAS
 ------------------------------------------------------------------------------------------------------------
-INSERT INTO tb_classificacao (cla_nome)
+NSERT INTO tb_classificacao (cla_nome)
 VALUES  ('Problema'),
-    		('Instalação'), 
+		('Instalação'), 
         ('Melhoria'), 
         ('Outros');                                 -- SELECT * FROM tb_classificacao ORDER BY cla_id;
 
 
 INSERT INTO tb_itens (itm_nome)
 VALUES 	('CPU'),
-    		('Monitor'),
+		('Monitor'),
         ('Mouse'),
         ('Teclado'),
         ('Som'),
@@ -94,56 +108,59 @@ VALUES 	('CPU'),
         ('Software');                               -- SELECT * FROM tb_itens ORDER BY itm_id;
 
 
-INSERT INTO tb_maquina (maq_num)
-VALUES 	('0'),
-		    ('311'),
-        ('312'),
-        ('313'),
-        ('314'),
-        ('315'),
-        ('316');                                    -- SELECT * FROM tb_maquina ORDER BY maq_id;
+INSERT INTO tb_maquina (maq_num, sl_id)
+VALUES 	('0',   1),
+		('311', 1),
+        ('312', 2),
+        ('313', 2),
+        ('314', 3),
+        ('315', 3),
+        ('316', 4);                                    -- SELECT * FROM tb_maquina ORDER BY maq_id;
 
 
-INSERT INTO tb_sala (sl_num)
-VALUES 	('10'),
-		    ('11'),
-        ('12'),
-        ('13');                                    -- SELECT * FROM tb_sala ORDER BY sl_id;
+INSERT INTO tb_sala (sl_num, bl_id)
+VALUES 	('10', 1),
+		('11', 2),
+        ('12', 3),
+        ('13', 4);                                    -- SELECT * FROM tb_sala ORDER BY sl_id;
 
 
 INSERT INTO tb_bloco (bl_nome)
 VALUES 	('A'),
-		    ('B'),
+		('B'),
         ('C'),
         ('D');                                     -- SELECT * FROM tb_bloco ORDER BY bl_id;
 
-INSERT INTO 
-	tb_chamado 
-    (cla_nome, 
-    itm_nome, 
-    cha_assunto, 
-    maq_num, 
-    sl_num, 
-    bl_nome, 
-    cha_desc)
-VALUES 
-	('Problema',
-     'Monitor',
-     'Nao liga',
-     '311',
-     '10',
-     'A',
-     'Ja verifiquei se o cabo estava solto');     -- SELECT * FROM tb_chamado ORDER BY cha_sit;
 
-
-INSERT INTO tb_usuario 
-            (user_nome,
-            user_senha,
-            user_status)
+INSERT INTO tb_administrador
+            (adm_id,
+            adm_nome,
+            adm_senha,
+            adm_status)
 VALUES 
-       ('Admin',
+       (1,'Admin',
        MD5('AdminSistAcess123'),
-       0);
+       0);                                          -- SELECT * FROM tb_administrador ORDER BY adm_id;
+
+--LeonardoSarruf - 02/11/2024 Insert comentado por conta da nova logica da tabela chamado
+-- INSERT INTO 
+-- 	tb_chamado 
+--     (cla_nome, 
+--     itm_nome, 
+--     cha_assunto, 
+--     maq_num, 
+--     sl_num, 
+--     bl_nome, 
+--     cha_desc)
+-- VALUES 
+-- 	('Problema',
+--      'Monitor',
+--      'Nao liga',
+--      '311',
+--      '10',
+--      'A',
+--      'Ja verifiquei se o cabo estava solto');     
+--Fim - LeonardoSarruf - 02/11/2024 Insert comentado por conta da nova logica da tabela chamado
 
 
 -- DML - ATUALIZANDO DADOS
@@ -441,40 +458,6 @@ null                  , -- Itm_id       INT,
 null                  , -- Maq_id       INT,
 null                   -- Sl_id        INT
 );
-
-
-
-
-
-CREATE TABLE tb_chamado (
-  cha_id 		int(11) 		NOT NULL AUTO_INCREMENT,
-  cha_dt_inicio date 			NOT NULL,
-  cla_nome 		varchar(20) 	NOT NULL,
-  itm_nome 		varchar(20) 	NOT NULL,
-  cha_assunto 	varchar(50) 	NOT NULL,
-  maq_num 		varchar(10) 	NOT NULL,
-  sl_num 		varchar(10) 	NOT NULL,
-  bl_nome 		varchar(20) 	NOT NULL,
-  cha_desc 		varchar(300) 	DEFAULT NULL,
-  cha_sit 		varchar(20) 	NOT NULL DEFAULT 'Aberto',
-  cha_dt_fim 	date 			DEFAULT NULL,
-  cha_notes 	varchar(300) 	DEFAULT NULL,
-  PRIMARY KEY (cha_id),
-  
-  UNIQUE KEY 	cha_id 		(cha_id),
-  KEY 			cla_nome 	(cla_nome),
-  KEY 			itm_nome 	(itm_nome),
-  KEY 			maq_num 	(maq_num),
-  KEY 			sl_num 		(sl_num),
-  KEY 			bl_nome 	(bl_nome),
-  
-  CONSTRAINT tb_chamado_ibfk_1 FOREIGN KEY (cla_nome) 	REFERENCES tb_classificacao (cla_nome),
-  CONSTRAINT tb_chamado_ibfk_2 FOREIGN KEY (itm_nome) 	REFERENCES tb_itens (itm_nome),
-  CONSTRAINT tb_chamado_ibfk_3 FOREIGN KEY (maq_num) 	REFERENCES tb_maquina (maq_num),
-  CONSTRAINT tb_chamado_ibfk_4 FOREIGN KEY (sl_num) 	REFERENCES tb_sala (sl_num),
-  CONSTRAINT tb_chamado_ibfk_5 FOREIGN KEY (bl_nome) 	REFERENCES tb_bloco (bl_nome)
-);
-
  
 
 -- LISTA DE OPÇÕES DE ACTION
@@ -508,3 +491,59 @@ CREATE TABLE tb_chamado (
 --  'Insert_TbSal'
 --  'SelectId_TbSal' 
 --  'SelectAll_TbSal'
+
+-- ----------------------------------------------------------------------------------------
+-- CRIANDO PROCEDURE DDL
+DELIMITER $$
+create procedure DDL(
+IN Action int
+)
+BEGIN
+
+  -- --------------------------------------------------------------------------------------------
+  -- Action referente ao DDL bloco
+IF Action = 1 THEN
+select bl_id ,bl_nome from tb_bloco;
+end if;
+
+  -- --------------------------------------------------------------------------------------------
+  -- Action referente ao DDL itens
+If Action = 2 then
+select itm_id, itm_nome from tb_itens;
+end IF;
+
+  -- --------------------------------------------------------------------------------------------
+  -- Action referente ao DDL classificação
+If Action = 3 then
+select cla_id, cla_nome from tb_classificacao;
+end IF;
+
+  -- --------------------------------------------------------------------------------------------
+  -- Action referente ao DDL maquina
+If Action = 4 then
+select maq_id, maq_num from tb_maquina;
+end IF;
+
+  -- --------------------------------------------------------------------------------------------
+  -- Action referente ao DDL sala
+If Action = 5 then
+select sl_id, sl_num from tb_sala;
+end IF;
+
+END $$
+
+
+-- ----------------------------------------------------------------------------------------
+-- CRIANDO PROCEDURE LOGIN
+DELIMITER $$
+create procedure LOGIN(
+IN Senha nvarchar(100), 
+IN Nome varchar(50)
+)
+BEGIN
+
+SELECT * 
+FROM tb_administrador
+WHERE adm_senha = MD5(Senha) and adm_nome = Nome and adm_status = 0; -- verifica login
+
+END $$

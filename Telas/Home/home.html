@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Smart Fix - Sistema de Chamados</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+            *-
+        />
+        <link rel="stylesheet" href="style.css" />
+        <!--LeonardoSarruf - 02/11/2024 - Carrega script.js -->
+        <script src="../../Components/scriptSideBar.js" defer></script>
+        <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega script.js -->
+    </head>
+
+    <body>
+        <!--LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
+        <div id="sidebar-container"></div>
+        <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <!-- Header -->
+            <div class="header">
+                <h1>Dashboards</h1>
+            </div>
+
+            <!-- Cards -->
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div
+                            class="card-icon"
+                            style="background-color: #eef2ff"
+                        >
+                            <i
+                                class="fas fa-ticket-alt"
+                                style="color: var(--primary-color)"
+                            ></i>
+                        </div>
+
+                        <div>
+                            <h3>Abertos</h3>
+                            <p class="text-3xl font-bold">200</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div
+                            class="card-icon"
+                            style="background-color: #fef3c7"
+                        >
+                            <i
+                                class="fas fa-clock"
+                                style="color: var(--warning-color)"
+                            ></i>
+                        </div>
+
+                        <div>
+                            <h3>Em andamento</h3>
+                            <p class="text-3xl font-bold">26</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div
+                            class="card-icon"
+                            style="background-color: #ecfdf5"
+                        >
+                            <i
+                                class="fas fa-check-circle"
+                                style="color: var(--success-color)"
+                            ></i>
+                        </div>
+
+                        <div>
+                            <h3>Resolvidos</h3>
+                            <p class="text-3xl font-bold">201</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div
+                            class="card-icon"
+                            style="background-color: #fee2e2"
+                        >
+                            <i
+                                class="fas fa-stopwatch"
+                                style="color: var(--danger-color)"
+                            ></i>
+                        </div>
+
+                        <div>
+                            <h3>Tempo Médio</h3>
+                            <p class="text-3xl font-bold">1h05</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabela de Chamados -->
+        <div class="table-container">
+            <h2 style="margin-bottom: 1rem">Últimos Chamados</h2>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dt.Abertura</th>
+                        <th>Classificação</th>
+                        <th>Assunto</th>
+                        <th>Item</th>
+                        <th>Maq.nº</th>
+                        <th>Sl.nº</th>
+                        <th>Bl.nº</th>
+                        <th>Situação</th>
+                        <th>Dt.Finalização</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>2024/0001</td>
+                        <td>30/10/2024</td>
+                        <td>Problema</td>
+                        <td>Monitor não liga</td>
+                        <td>Monitor</td>
+                        <td>356</td>
+                        <td>15</td>
+                        <td>B</td>
+                        <td>Em execução</td>
+                        <td>xxxxxx</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ******************************************************************************************** -->
+        <!-- script de ação - menu lateral/Sidebar -->
+    </body>
+</html>
