@@ -35,6 +35,7 @@ body {
     height: 100vh;
     transition: all 0.6s ease;
     z-index: 1000;
+    
 }
 
 .sidebar.collapsed {
@@ -52,7 +53,10 @@ body {
     align-items: center;
     cursor: pointer;
     transition: background-color 0.2s;
+    color: white;
+    text-decoration: none;
 }
+
 
 .sidebar.collapsed .menu-item span {
     opacity: 0%;
@@ -68,6 +72,15 @@ body {
 }
 
 .sidebar .sidebar-header img {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed .menu-item.has-submenu i.fas.fa-chevron-down{
+    opacity: 0%;
+}
+
+.sidebar .menu-item.has-submenu i.fas.fa-chevron-down {
     opacity: 1;
     transition: opacity 0.3s ease;
 }
@@ -236,4 +249,96 @@ img {
     width: 100%;
     height: auto;
     border-radius: 20px;
+}
+
+.menu-item.has-submenu {
+    position: relative; /* Para controlar a posição do submenu */
+}
+
+.submenu {
+    padding-left: 1rem; /* Espaçamento à esquerda */
+    position:relative;
+    display: none; /* Inicialmente escondido */
+    padding: 0; /* Remove padding do submenu */
+    margin: 0; /* Remove margens do submenu */
+    background-color: #1f2937; /* Cor de fundo da submenu */
+    border-radius: 5%;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.submenu a {
+    display: block; /* Para garantir que os links ocupem toda a largura */
+    padding: 0.5rem 1rem; /* Espaçamento dos links do submenu */
+    color: white; /* Cor dos links */
+    text-decoration: none; /* Remove underline */
+}
+
+.submenu a:hover {
+    background-color: rgba(146, 80, 5, 0.637); /* Cor ao passar o mouse */
+}
+
+.submenu.show {
+    display: block; /* Mostra o submenu quando a classe 'show' está presente */
+}
+
+.form-row {
+    display: flex; /* Utiliza Flexbox para alinhar os itens em linha */
+    flex-wrap: wrap; /* Permite que os itens quebrem para a linha seguinte em telas menores */
+    gap: 1.5rem; /* Espaçamento entre os itens */
+    margin-bottom: 1.5rem; /* Espaço abaixo da linha */
+}
+
+.form-group {
+    flex: 1; /* Faz com que os itens cresçam para ocupar o espaço disponível */
+    min-width: 150px; /* Largura mínima para cada campo */
+}
+
+.form-group label {
+    font-weight: bold; /* Destaque para a label */
+    margin-bottom: 0.5rem; /* Espaço entre a label e o campo */
+    color: #333; /* Cor da fonte */
+}
+
+.form-group select,
+.form-group input {
+    width: 100%; /* Faz com que o campo ocupe toda a largura do container */
+    padding: 0.75rem; /* Espaçamento interno dos campos */
+    border: 1px solid #ccc; /* Borda padrão */
+    border-radius: 8px; /* Bordas arredondadas */
+    font-size: 1rem; /* Tamanho da fonte */
+    background-color: #f9f9f9; /* Cor de fundo dos campos */
+    transition: border-color 0.3s ease; /* Transição suave para a borda */
+}
+
+.form-group select:focus,
+.form-group input:focus {
+    outline: none; /* Remove o contorno padrão ao focar */
+    border-color: #4f46e5; /* Cor da borda ao focar */
+    box-shadow: 0 0 5px rgba(79, 70, 229, 0.5); /* Sombra para destacar o foco */
+}
+
+.serch-save-clear-group{
+    display: flex; /* Alinha os botões lado a lado */
+    gap: 1rem; /* Espaçamento entre os botões */
+}
+
+.btn {
+    display: flex; /* Flexbox para alinhar ícone e texto */
+    align-items: center; /* Centraliza verticalmente o conteúdo */
+    padding: 0.75rem 1.5rem; /* Espaçamento interno dos botões */
+    border: none; /* Remove a borda padrão */
+    border-radius: 8px; /* Bordas arredondadas */
+    background-color: #4f46e5; /* Cor de fundo */
+    color: white; /* Cor do texto */
+    font-size: 1rem; /* Tamanho da fonte */
+    cursor: pointer; /* Cursor pointer para indicar que é clicável */
+    transition: background-color 0.3s ease; /* Transição suave para a cor de fundo */
+}
+
+.btn:hover {
+    background-color: #3730a3; /* Cor de fundo ao passar o mouse */
+}
+
+.btn i {
+    margin-right: 0.5rem; /* Espaço entre o ícone e o texto */
 }
