@@ -205,9 +205,9 @@ CREATE PROCEDURE ComandosSmartFix(
   IN Cl_id        INT,
   IN Itm_id       INT,
   IN Maq_id       INT,
-  IN Sl_id        INT
+  IN Sl_id        INT,
+  IN bl_departamento VARCHAR(20)
 )
-
 BEGIN
 
   -- --------------------------------------------------------------------------------------------
@@ -233,12 +233,11 @@ BEGIN
   IF Action = 'Insert_TbCha' THEN
     
     INSERT INTO tb_chamado 
-                (cla_nome, itm_nome, cha_assunto, maq_num, sl_num, bl_nome, cha_desc)
+                (cla_id, itm_id, cha_assunto, maq_id, sl_id, bl_id, cha_desc)
           VALUES 
-                (cla_nome, itm_nome, Cha_assunto, maq_num, sl_num, bl_nome, Cha_desc);
+                (Cl_id, Itm_id, Cha_assunto, Maq_id, Sl_id, Bl_id, Cha_desc);
   END IF;
 -- ----------------------------------------------    
-
   IF Action = 'SelectId_TbCha' THEN
     
     SELECT * FROM tb_chamado
@@ -258,7 +257,8 @@ BEGIN
   IF Action = 'Update_TbBlo' THEN
     
     UPDATE tb_bloco
-       SET bl_nome  = bl_nome
+       SET bl_nome  = bl_nome,
+		   bl_departamento = bl_departamento
      WHERE bl_id    = Bl_id;
   END IF;
 -- ----------------------------------------------    
@@ -272,8 +272,8 @@ BEGIN
 
   IF Action = 'Insert_TbBlo' THEN
     
-    INSERT INTO tb_bloco (bl_nome)
-         VALUES (bl_nome);
+    INSERT INTO tb_bloco (bl_nome, bl_departamento)
+         VALUES (bl_nome,bl_departamento);
   END IF;
 -- ----------------------------------------------    
 
@@ -336,7 +336,6 @@ BEGIN
      WHERE itm_id   = Itm_id;
   END IF;
 -- ----------------------------------------------    
-
   IF Action = 'Delete_TbItm' THEN
 
     DELETE FROM tb_itens
@@ -369,11 +368,12 @@ BEGIN
   IF Action = 'Update_TbMaq' THEN
  
     UPDATE tb_maquina
-       SET maq_num  = maq_num
+       SET maq_num  = maq_num,
+		   sl_id    = Sl_id,
+		   bl_id    = Bl_id
      WHERE maq_id   = Maq_id;
   END IF;
   -- ----------------------------------------------    
-
   IF Action = 'Delete_TbMaq' THEN
  
     DELETE FROM tb_maquina
@@ -383,8 +383,8 @@ BEGIN
 
   IF Action = 'Insert_TbMaq' THEN
  
-    INSERT INTO tb_maquina (maq_num)
-         VALUES (maq_num);
+    INSERT INTO tb_maquina (maq_num, sl_id, bl_id)
+         VALUES (maq_num, Sl_id, Bl_id);
   END IF;
   -- ----------------------------------------------    
 
@@ -406,11 +406,11 @@ BEGIN
   IF Action = 'Update_TbSal' THEN
  
      UPDATE tb_sala
-        SET sl_num = sl_num
+        SET sl_num = sl_num,
+			bl_id = Bl_id
       WHERE sl_id = Sl_id;
   END IF;
   -- ----------------------------------------------    
-
   IF Action = 'Delete_TbSal' THEN
  
     DELETE FROM tb_sala
@@ -420,8 +420,8 @@ BEGIN
 
   IF Action = 'Insert_TbSal' THEN
  
-    INSERT INTO tb_sala (sl_num)
-         VALUES (sl_num);
+    INSERT INTO tb_sala (sl_num, bl_id)
+         VALUES (sl_num, Bl_id);
   END IF;
   -- ----------------------------------------------    
   
