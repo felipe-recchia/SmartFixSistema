@@ -187,7 +187,7 @@ WHERE cha_id = 1;                               -- SELECT * FROM tb_chamado ORDE
 
 DELIMITER $$
 
-CREATE PROCEDURE ComandosSmartFix(
+create PROCEDURE ComandosSmartFix(
 
   IN Action VARCHAR      (50),
   IN Cha_id       INT,
@@ -233,9 +233,9 @@ BEGIN
   IF Action = 'Insert_TbCha' THEN
     
     INSERT INTO tb_chamado 
-                (cla_id, itm_id, cha_assunto, maq_id, sl_id, bl_id, cha_desc)
+                (cla_id,cha_dt_inicio, itm_id, cha_assunto, maq_id, sl_id, bl_id, cha_desc)
           VALUES 
-                (Cl_id, Itm_id, Cha_assunto, Maq_id, Sl_id, Bl_id, Cha_desc);
+                (Cl_id, curdate(),Itm_id, Cha_assunto, Maq_id, Sl_id, Bl_id, Cha_desc);
   END IF;
 -- ----------------------------------------------    
   IF Action = 'SelectId_TbCha' THEN
@@ -438,6 +438,7 @@ BEGIN
 
 END $$
 
+
 DELIMITER ;
 
 
@@ -472,42 +473,39 @@ null                   -- Sl_id        INT
 -- CRIANDO PROCEDURE DDL
 DELIMITER $$
 create procedure DDL(
-IN Action int
+IN Action int,
+IN sala_id int,
+IN bloco_id int
 )
 BEGIN
 
-  -- --------------------------------------------------------------------------------------------
-  -- Action referente ao DDL bloco
 IF Action = 1 THEN
 select bl_id ,bl_nome from tb_bloco;
 end if;
 
-  -- --------------------------------------------------------------------------------------------
-  -- Action referente ao DDL itens
 If Action = 2 then
 select itm_id, itm_nome from tb_itens;
 end IF;
 
-  -- --------------------------------------------------------------------------------------------
-  -- Action referente ao DDL classificação
 If Action = 3 then
 select cla_id, cla_nome from tb_classificacao;
 end IF;
 
-  -- --------------------------------------------------------------------------------------------
-  -- Action referente ao DDL maquina
 If Action = 4 then
-select maq_id, maq_num from tb_maquina;
+select maq_id, maq_num from tb_maquina
+inner join tb_sala on
+tb_sala.sl_id = tb_maquina.sl_id
+where tb_maquina.sl_id = sala_id;
 end IF;
 
-  -- --------------------------------------------------------------------------------------------
-  -- Action referente ao DDL sala
 If Action = 5 then
-select sl_id, sl_num from tb_sala;
+select sl_id, sl_num from tb_sala
+inner join tb_bloco on
+tb_bloco.bl_id = tb_sala.bl_id
+where tb_sala.bl_id = bloco_id;
 end IF;
 
 END $$
-
 
 -- ----------------------------------------------------------------------------------------
 -- CRIANDO PROCEDURE LOGIN
