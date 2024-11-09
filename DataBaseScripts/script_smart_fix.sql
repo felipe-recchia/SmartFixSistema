@@ -1,13 +1,3 @@
--- *********************************************************************************************************
--- ULTIMA ATUALIZAÇÃO 02/11 - 21H46
-
--- AJUSTE DE SEQUENCIA DE CRIAÇÃO DAS TABELAS DEVIDO A CHAVES ESTRANGEIRAS
-
-
-
-
--- *********************************************************************************************************
-
 CREATE DATABASE SMART_FIX;
 
 USE SMART_FIX;
@@ -44,17 +34,8 @@ CREATE TABLE tb_administrador (
   adm_id      int(11)           NOT NULL,
   adm_nome    varchar(50)       DEFAULT NULL,
   adm_senha   varchar(100)      DEFAULT NULL,
-  adm_status  smallint(6)       DEFAULT NULL,
-  
+  adm_status  smallint(6)       DEFAULT NULL,  
   PRIMARY KEY (adm_id)
-);
-
-
-CREATE TABLE tb_usuario (
-  user_id     INT               NOT NULL AUTO_INCREMENT,
-  user_email  varchar(100)      NOT NULL,
-  
-  PRIMARY KEY (user_id)
 );
 
 
@@ -110,49 +91,52 @@ CREATE TABLE tb_chamado (
   CONSTRAINT tb_chamado_ibfk_5 FOREIGN KEY (bl_id) 	  REFERENCES tb_bloco         (bl_id)
 );
 
+CREATE TABLE tb_usuario (
+  user_id     INT               NOT NULL AUTO_INCREMENT,
+  cha_id      INT               NOT NULL,
+  user_email  varchar(100)      NOT NULL,
+  PRIMARY KEY (user_id),
+  CONSTRAINT tb_usuario_ibfk_1 FOREIGN KEY (cha_id) 	REFERENCES 	tb_chamado(cha_id)
+);
 
 -- DML - POPULANDO TABELAS
 ------------------------------------------------------------------------------------------------------------
 INSERT INTO tb_classificacao (cla_nome)
 VALUES  ('Problema'),
-		    ('Instalação'), 
+		('Instalação'), 
         ('Melhoria'), 
         ('Outros');                                 -- SELECT * FROM tb_classificacao ORDER BY cla_id;
 
 
 INSERT INTO tb_itens (itm_nome)
 VALUES 	('CPU'),
-		    ('Monitor'),
+		('Monitor'),
         ('Mouse'),
         ('Teclado'),
         ('Som'),
         ('Internet'),
         ('Software');                               -- SELECT * FROM tb_itens ORDER BY itm_id;
 
-
 INSERT INTO tb_bloco (bl_nome)
 VALUES 	('A'),
-		    ('B'),
+		('B'),
         ('C'),
         ('D');                                     -- SELECT * FROM tb_bloco ORDER BY bl_id;
-
-
+        
 INSERT INTO tb_sala (sl_num, bl_id)
 VALUES 	('10', 1),
-		    ('11', 2),
+		('11', 2),
         ('12', 3),
         ('13', 4);                                    -- SELECT * FROM tb_sala ORDER BY sl_id;
 
-
-INSERT INTO tb_maquina (maq_num, sl_id)
-VALUES 	('0',   1),
-		    ('311', 2),
-        ('312', 3),
-        ('313', 4),
-        ('314', 2),
-        ('315', 3),
-        ('316', 4);                                    -- SELECT * FROM tb_maquina ORDER BY maq_id;
-
+INSERT INTO tb_maquina (maq_num, sl_id, bl_id)
+VALUES 	('0',   1, 1),
+		('311', 1, 1),
+        ('312', 2, 2),
+        ('313', 2, 2),
+        ('314', 3, 3),
+        ('315', 3, 3),
+        ('316', 4, 4);                                    -- SELECT * FROM tb_maquina ORDER BY maq_id;
 
 INSERT INTO tb_administrador
             (adm_id,
@@ -160,34 +144,16 @@ INSERT INTO tb_administrador
             adm_senha,
             adm_status)
 VALUES 
---       (1,'Admin',
---       MD5('AdminSistAcess123'),
---       0);                                          
-      (2,
-      'Thiago',
-       MD5('2222'),
-      0);                                            -- SELECT * FROM tb_administrador ORDER BY adm_id;
-
-
-
-
--- DML - ATUALIZANDO DADOS
-------------------------------------------------------------------------------------------------------------
-UPDATE tb_chamado
-SET 
-    cha_sit 	  = 'Encerrado',
-    cha_dt_fim 	= '2024-08-29',
-    cha_notes 	= 'Problema estava na placa'
-WHERE cha_id = 1;                               -- SELECT * FROM tb_chamado ORDER BY cha_id;
-
-
+       (1,'Admin',
+       MD5('AdminSistAcess123'),
+       0);
 
 -- ----------------------------------------------------------------------------------------
 -- CRIANDO PROCEDURE
 
 DELIMITER $$
 
-create PROCEDURE ComandosSmartFix(
+CREATE PROCEDURE ComandosSmartFix(
 
   IN Action VARCHAR      (50),
   IN Cha_id       INT,
@@ -206,7 +172,8 @@ create PROCEDURE ComandosSmartFix(
   IN Itm_id       INT,
   IN Maq_id       INT,
   IN Sl_id        INT,
-  IN bl_departamento VARCHAR(20)
+  IN bl_departamento VARCHAR(20),
+  IN user_email VARCHAR(100)
 )
 BEGIN
 
@@ -233,9 +200,16 @@ BEGIN
   IF Action = 'Insert_TbCha' THEN
     
     INSERT INTO tb_chamado 
-                (cla_id,cha_dt_inicio, itm_id, cha_assunto, maq_id, sl_id, bl_id, cha_desc)
+                (cla_id,cha_dt_inicio, itm_id, cha_assunto, maq_id, sl_id, bl_id, cha_desc)           
           VALUES 
                 (Cl_id, curdate(),Itm_id, Cha_assunto, Maq_id, Sl_id, Bl_id, Cha_desc);
+	SET @cha_fk = LAST_INSERT_ID();
+                
+	INSERT INTO tb_usuario
+		(cha_id, user_email)
+	VALUES
+        (@cha_fk,user_email);
+        
   END IF;
 -- ----------------------------------------------    
   IF Action = 'SelectId_TbCha' THEN
@@ -438,7 +412,6 @@ BEGIN
 
 END $$
 
-
 DELIMITER ;
 
 
@@ -467,10 +440,44 @@ null                  , -- Itm_id       INT,
 null                  , -- Maq_id       INT,
 null                   -- Sl_id        INT
 );
- 
 
--- ----------------------------------------------------------------------------------------
--- CRIANDO PROCEDURE DDL
+
+
+
+-- LISTA DE OPÇÕES DE ACTION
+--  'Update_TbCha'
+--  'Delete_TbCha'
+--  'Insert_TbCha'
+--  'SelectId_TbCha'
+--  'SelectAll_TbCha'
+--  'Update_TbBlo'
+--  'Delete_TbBlo'
+--  'Insert_TbBlo'
+--  'SelectId_TbBlo'
+--  'SelectAll_TbBlo'
+--  'Update_TbCla'
+--  'Delete_TbCla'
+--  'Insert_TbCla'
+--  'SelectId_TbCla'
+--  'SelectAll_TbCla'
+--  'Update_TbItm'
+--  'Delete_TbItm'
+--  'Insert_TbItm'
+--  'SelectId_TbItm'
+--  'SelectAll_TbItm'
+--  'Update_TbMaq'
+--  'Delete_TbMaq'
+--  'Insert_TbMaq'
+--  'SelectId_TbMaq'
+--  'SelectAll_TbMaq'
+--  'Update_TbSal'
+--  'Delete_TbSal'
+--  'Insert_TbSal'
+--  'SelectId_TbSal' 
+--  'SelectAll_TbSal'
+
+use smart_fix
+
 DELIMITER $$
 create procedure DDL(
 IN Action int,
@@ -507,12 +514,11 @@ end IF;
 
 END $$
 
--- ----------------------------------------------------------------------------------------
--- CRIANDO PROCEDURE LOGIN
+
 DELIMITER $$
 create procedure LOGIN(
-IN Senha  varchar(100),   -- (Não aceitou Nvarchar)
-IN Nome   varchar(50)
+IN Senha nvarchar(100), 
+IN Nome varchar(50)
 )
 BEGIN
 
@@ -520,4 +526,20 @@ SELECT *
 FROM tb_administrador
 WHERE adm_senha = MD5(Senha) and adm_nome = Nome and adm_status = 0; -- verifica login
 
+END $$
+
+
+-- ----------------------------------------------------------------------------------------
+-- CRIANDO PROCEDURE GRAFANA
+DELIMITER $$
+create procedure GRAFANA(
+IN Action  varchar(80)
+)
+BEGIN
+
+IF Action = 'Chamados em Aberto' then
+	select count(*) 
+		from tb_chamado 
+	where cha_sit = 'Aberto';
+end if;
 END $$
