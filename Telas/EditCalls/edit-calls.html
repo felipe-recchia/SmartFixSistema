@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Smart Fix - Sistema de Chamados</title>
+        <link
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+            rel="stylesheet"
+        />
+        <link id="theme-style" rel="stylesheet" href="../../style.css" />
+        <script src="../../Components/scriptSideBar.js" defer></script>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                fetch("editCalls.php")
+                    .then((response) => response.json())
+                    .then((data) => {
+                        let tableBody =
+                            document.getElementById("grid-chamados");
+                        data.forEach((resultado) => {
+                            let row = `<tr>
+                            <td>${resultado.cha_id}         </td>
+                            <td>${resultado.cha_dt_inicio}  </td>
+                            <td>${resultado.classificacao}  </td>
+                            <td>${resultado.cha_assunto}    </td>
+                            <td>${resultado.item}           </td>
+                            <td>${resultado.maquina}        </td>
+                            <td>${resultado.sala}           </td>
+                            <td>${resultado.bloco}          </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" value="${resultado.cha_sit} ">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="date" value="${resultado.cha_dt_fim}">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <input type="text" value="${resultado.cha_notes}">
+                                </div>
+                            </td>
+                            <td>
+                                <div class="form-group">
+                                    <button 
+                                        type="button" 
+                                        class="btn" 
+                                        id="btnSalvar" 
+                                        onclick="window.location.href='atualizar.php'"
+                                        method="POST"
+                                    >                                      
+                                        Atualizar
+                                    </button>
+                                </div>
+                            </td>
+
+                            
+                        </tr>`;
+                            tableBody.innerHTML += row;
+                        });
+                    })
+                    .catch((error) =>
+                        console.error("Erro ao carregar os dados:", error)
+                    );
+            });
+        </script>
+    </head>
+
+    <body>
+        <div class="container">
+            <!--LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
+            <div id="sidebar-container"></div>
+            <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
+
+            <!-- Main Content -->
+            <div class="main-content" id="mainContent">
+                <!-- Header -->
+                <div class="header">
+                    <h1>Atualizar chamados</h1>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ID">Nº Chamado</label>
+                        <input type="text" id="cha_id" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="classificacao">Classificação</label>
+                        <select name="classificacao" id="classificacao">
+                            <option value="" disabled selected>
+                                Classificação
+                            </option>
+                            <option value="Problema">Problema</option>
+                            <option value="Instalação">Instalacao</option>
+                            <option value="Melhoria">Melhoria</option>
+                            <option value="Outro">Outro</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="situacao">Situação</label>
+                        <select name="situacao" id="situacao">
+                            <option value="" disabled selected>Situação</option>
+                            <option value="Aberto">Aberto</option>
+                            <option value="Em abdamento">Em Andamento</option>
+                            <option value="Finalizado">Finalizado</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Data de Abertura</label>
+                        <input type="date" id="dtfinal" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Data de Finalização</label>
+                        <input type="date" id="dtfinal" />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="serch-save-clear-group">
+                        <button type="button" class="btn" id="btnLimpar">
+                            <i class="fas fa-eraser"></i> Limpar
+                        </button>
+                        <button type="button" class="btn" id="btnBuscar">
+                            <i class="fas fa-search"></i> Buscar
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Tabela de Chamados -->
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Dt.Abertura</th>
+                                <th>Classificação</th>
+                                <th>Assunto</th>
+                                <th>Item</th>
+                                <th>Maq.nº</th>
+                                <th>Sl.nº</th>
+                                <th>Bl.nº</th>
+                                <th>Situação</th>
+                                <th>Dt.Finalização</th>
+                                <th>Anotações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="grid-chamados"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- ******************************************************************************************** -->
+        <!-- script de ação - menu lateral/Sidebar -->
+
+        <script>
+            document
+                .getElementById("sidebar")
+                .addEventListener("click", function () {
+                    this.classList.toggle("collapsed");
+                    document
+                        .getElementById("mainContent")
+                        .classList.toggle("expanded");
+                });
+        </script>
+    </body>
+</html>

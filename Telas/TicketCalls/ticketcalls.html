@@ -9,7 +9,7 @@
             rel="stylesheet"
             *-
         />
-        <link rel="stylesheet" href="../../style.css" />
+        <link id="theme-style" rel="stylesheet" href="../../style.css" />
         <!--LeonardoSarruf - 02/11/2024 - Carrega script.js -->
         <script src="../../Components/scriptSideBar.js" defer></script>
         <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega script.js -->
@@ -23,18 +23,24 @@
 
         <!-- Main Content -->
         <div class="main-content" id="mainContent">
+            <div class="header">
+                <h1>Consultar chamados</h1>
+            </div>
+
             <div class="form-row">
                 <div class="form-group">
                     <label for="classificacao">Classificação</label>
                     <select name="classificacao" id="classificacao">
-                        <option value="" disabled selected>Classificação</option>
+                        <option value="" disabled selected>
+                            Classificação
+                        </option>
                         <option value="volvo">Problema</option>
                         <option value="saab">Instalacao</option>
                         <option value="mercedes">Melhoria</option>
                         <option value="audi">Outro</option>
                     </select>
                 </div>
-        
+
                 <div class="form-group">
                     <label for="sala">Sala</label>
                     <select name="sala" id="sala">
@@ -45,7 +51,7 @@
                         <option value="audi">114</option>
                     </select>
                 </div>
-        
+
                 <div class="form-group">
                     <label for="bloco">Bloco</label>
                     <select name="bloco" id="bloco">
@@ -56,7 +62,7 @@
                         <option value="audi">D</option>
                     </select>
                 </div>
-        
+
                 <div class="form-group">
                     <label for="situacao">Situação</label>
                     <select name="situacao" id="situacao">
@@ -69,7 +75,7 @@
 
                 <div class="form-group">
                     <label for="email">Data de Finalização</label>
-                    <input type="date" id="dtfinal"/>
+                    <input type="date" id="dtfinal" />
                 </div>
             </div>
 
@@ -87,29 +93,29 @@
                 </div>
             </div>
 
-        <!-- Tabela de Chamados -->
-        <div class="table-container">
-            <h2 style="margin-bottom: 1rem">Últimos Chamados</h2>
+            <!-- Tabela de Chamados -->
+            <div class="table-container">
+                <h2 style="margin-bottom: 1rem">Últimos Chamados</h2>
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Dt.Abertura</th>
-                        <th>Classificação</th>
-                        <th>Assunto</th>
-                        <th>Item</th>
-                        <th>Maq.nº</th>
-                        <th>Sl.nº</th>
-                        <th>Bl.nº</th>
-                        <th>Situação</th>
-                        <th>Dt.Finalização</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    <tr>
-                        <!-- <td>2024/0001</td>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Dt.Abertura</th>
+                            <th>Classificação</th>
+                            <th>Assunto</th>
+                            <th>Item</th>
+                            <th>Maq.nº</th>
+                            <th>Sl.nº</th>
+                            <th>Bl.nº</th>
+                            <th>Situação</th>
+                            <th>Dt.Finalização</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <!-- <td>2024/0001</td>
                         <td>30/10/2024</td>
                         <td>Problema</td>
                         <td>Monitor não liga</td>
@@ -119,11 +125,11 @@
                         <td>B</td>
                         <td>Em execução</td>
                         <td>xxxxxx</td> -->
-                    </tr>
-                </tbody>
-            </table>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
         <!-- ******************************************************************************************** -->
         <!-- script de ação - menu lateral/Sidebar -->
     </body>

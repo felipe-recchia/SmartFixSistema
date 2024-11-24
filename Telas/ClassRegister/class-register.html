@@ -9,7 +9,8 @@
             rel="stylesheet"
             *-
         />
-        <link rel="stylesheet" href="../../style.css" />
+        <link id="theme-style" rel="stylesheet" href="../../style.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--LeonardoSarruf - 02/11/2024 - Carrega script.js -->
         <script src="../../Components/scriptSideBar.js" defer></script>
         <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega script.js -->
@@ -23,21 +24,34 @@
 
         <!-- Main Content -->
         <div class="main-content" id="mainContent">
-            <div class="form-row">
+            <div class="header">
+                <h1>Cadastrar salas</h1>
+            </div>
+            <div class="form-alert-success" style="display: none;">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                Dados Inseridos com Sucesso!
+            </div>
+            
+            <div class="form-alert" style="display: none;">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                Verifique os Campos em Destaque!
+            </div>
 
+            <div class="form-alert-alreadyexists" style="display: none;">
+                <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+                Erro ao Inserir/Atualizar - Registro já existe!
+            </div>
+
+            <div class="form-row">
                 <div class="form-group">
                     <label for="sala">Sala</label>
-                    <input type="text" id="sala" name="sala"></input>
+                    <input type="number" id="sala" name="sala"></input>
                 </div>
 
                 <div class="form-group">
-                    <label for="departamento">Bloco</label>
+                    <label for="bloco">Localização</label>
                     <select name="bloco" id="bloco">
-                        <option value="" disabled selected>Bloco</option>
-                        <option value="A">A</option>
-                        <option value="B">B</option>
-                        <option value="C">C</option>
-                        <option value="D">D</option>
+                        <option value=""></option>
                     </select>
                 </div>
             </div>
@@ -53,6 +67,9 @@
                     <button type="button" class="btn" id="btnBuscar">
                         <i class="fas fa-search"></i> Buscar
                     </button>
+                    <button style="display: none;" type="button" class="btn" id="btnAtualizar">
+                        <i class="material-icons">sync</i> Atualizar 
+                    </button>
                 </div>
             </div>
 
@@ -65,16 +82,13 @@
                     <tr>
                         <th>ID</th>
                         <th>Sala</th>
-                        <th>Bloco</th>
+                        <th>Localização</th>
                     </tr>
                 </thead>
                 
-                <tbody>
-                    <tr>
-                        <!-- <td>1</td>
-                        <td>A</td> -->
-                    </tr>
+                <tbody id="tbody">
                 </tbody>
+
             </table>
         </div>
     </div>

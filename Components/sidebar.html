@@ -11,7 +11,12 @@
 
     <a href="../TicketCalls/ticketcalls.html" class="menu-item">
         <i class="fas fa-ticket-alt" style="color: rgb(197, 160, 57)"></i>
-        <span>Chamados</span>
+        <span>Consultar Chamados</span>
+    </a>
+
+    <a href="../EditCalls/edit-calls.html" class="menu-item">
+        <i class="fas fa-cog"></i>
+        <span>Atualizar Chamado</span>
     </a>
 
     <div class="menu-item has-submenu">
@@ -20,13 +25,27 @@
         <i class="fas fa-chevron-down" id="dropdown-icon" style="margin-left: auto;"></i>
         <div class="submenu" id="submenu">
             <a href="../ClassRegister/class-register.html">Cadastro de Sala</a>
-            <a href="../BlockRegister/block-register.html">Cadastro de Bloco</a>
+            <a href="../BlockRegister/block-register.html">Cadastro de Localização</a>
             <a href="../MachineRegister/machine-register.html">Cadastro de Máquina</a>
         </div>
     </div>
-
-    <a href="../Configuration/configuration.html" class="menu-item">
-        <i class="fas fa-cog"></i>
-        <span>Configurações</span>
+    <div class="menu-item">
+    <!-- <input id="switch-theme-btn" type="checkbox"> -->
+    <label class="switch">
+        <input type="checkbox" id="switch-theme-btn">
+        <div class="slider">
+          <div class="sun"></div>
+          <div class="moon"></div>
+          <div class="cloud cloud1"></div>
+          <div class="cloud cloud2"></div>
+          <div class="star star1"></div>
+          <div class="star star2"></div>
+          <div class="star star3"></div>
+          <div class="star star4"></div>
+          <div class="star star5"></div>
+        </div>
+      </label>
+      <span>Modo Escuro</span>
+    </div>
     </div>
 </div>
