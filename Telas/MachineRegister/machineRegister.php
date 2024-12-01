@@ -30,13 +30,13 @@ if ($conn) {
             if($actionType === "buscar"){
             $action = "Select_TbMaq";
             // Chamada da segunda procedure ComandosSmartFix.
-            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtSearch = $conn->prepare($sqlSearch);
             
             // var_dump($maq_num);
             $stmtSearch->execute([
                 $action, null, null, null, null, null, null, null, $maq_num,
-                null, null, null, $bl_id, null, null, null, $sl_id, null, null
+                null, null, null, $bl_id, null, null, null, $sl_id, null, null, null
             ]);
 
             $searchResults = $stmtSearch->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
@@ -45,12 +45,12 @@ if ($conn) {
             echo json_encode(["SearchResults" => $searchResults]);
         }elseif($actionType === "salvar"){
             $action = "Insert_TbMaq";
-            $sqlSave = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlSave = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtSave = $conn->prepare($sqlSave);
 
             $stmtSave->execute([
                 $action, null, null, null, null, null, null, null, $maq_num,
-                null, null, null, $bl_id, null, null, null, $sl_id, null, null
+                null, null, null, $bl_id, null, null, null, $sl_id, null, null, null
             ]);
 
             $saveResults = $stmtSave->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
@@ -59,12 +59,12 @@ if ($conn) {
             echo json_encode(["SaveResults" => $saveResults]);
         }elseif($actionType === "atualizar"){
             $action = "Update_TbMaq";
-            $sqlUpdate = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlUpdate = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtUpdate = $conn->prepare($sqlUpdate);
 
             $stmtUpdate->execute([
                 $action, null, null, null, null, null, null, null, $maq_num,
-                null, null, null, $bl_id, null, null, $maq_id, $sl_id, null, null
+                null, null, null, $bl_id, null, null, $maq_id, $sl_id, null, null, null
             ]);
 
             $updateResults = $stmtUpdate->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.

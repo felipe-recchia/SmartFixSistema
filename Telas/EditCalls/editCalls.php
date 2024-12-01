@@ -1,42 +1,98 @@
 <?php
-$dsn = 'mysql:host=localhost;dbname=smart_fix';
-$usuario = 'root';
-$senha = '';
+include_once '../../ConectionString/conectionString.php'; // Importa a conexão com o banco de dados.
 
-try {
-    $conexao = new PDO($dsn, $usuario, $senha);
+$conexao = new Conexao(); // Cria a instância de conexão.
+$conn = $conexao->conectar(); // Estabelece a conexão.
 
+if ($conn) {
+    try {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['classificacao'],$_POST['cha_id'],$_POST['maquina'],$_POST['sala'], $_POST['bloco'], $_POST['action'], $_POST['item'], $_POST['dtinicio'], $_POST['dtfinal'], $_POST['situacao'])) {
+            $actionType = $_POST['action'];
+            
 
-    // Corrigindo a query SQL com concatenação adequada e espaços apropriados
-    $query = "SELECT " 
-        . "chamado.cha_id, "
-        . "chamado.cha_dt_inicio, "
-        . "classificacao.cla_nome AS classificacao, "
-        . "itens.itm_nome AS item, "
-        . "chamado.cha_assunto, "
-        . "maquina.maq_num AS maquina, "
-        . "sala.sl_num AS sala, "
-        . "bloco.bl_nome AS bloco, "
-        . "chamado.cha_desc, "
-        . "chamado.cha_sit, "
-        . "chamado.cha_dt_fim, "
-        . "chamado.cha_notes "
-        . "FROM tb_chamado chamado "
-        . "JOIN tb_classificacao classificacao ON chamado.cla_id = classificacao.cla_id "
-        . "JOIN tb_itens itens ON chamado.itm_id = itens.itm_id "
-        . "JOIN tb_maquina maquina ON chamado.maq_id = maquina.maq_id "
-        . "JOIN tb_sala sala ON chamado.sl_id = sala.sl_id "
-        . "JOIN tb_bloco bloco ON chamado.bl_id = bloco.bl_id "
-        . "WHERE chamado.cha_id = 1";
+            $maquina = filter_var($_POST['maquina'] ?? null, FILTER_VALIDATE_INT);
+            $sala = filter_var($_POST['sala'] ?? null, FILTER_VALIDATE_INT);  
+            $bloco = filter_var($_POST['bloco'] ?? null, FILTER_VALIDATE_INT);
+            $cha_id = filter_var($_POST['cha_id'] ?? null, FILTER_VALIDATE_INT);
+            $classificacao = filter_var($_POST['classificacao'] ?? null, FILTER_VALIDATE_INT);
+            $item = filter_var($_POST['item'] ?? null, FILTER_VALIDATE_INT);
+            $dtinicio = filter_var($_POST['dtinicio'] ?? null, FILTER_SANITIZE_STRING);
+            $dtfinal = filter_var($_POST['dtfinal'] ?? null, FILTER_SANITIZE_STRING);
+            $situacao = filter_var($_POST['situacao'] ?? null, FILTER_SANITIZE_STRING);
+            $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
 
-    $retorno = $conexao->query($query);
-    
-    $resultados = $retorno->fetchAll(PDO::FETCH_OBJ);
-    
-    // Exibe os resultados como JSON
-    echo json_encode($resultados);    
+            if ($cha_id === false) {
+                $cha_id = null; 
+            }
+            if ($item === false) {
+                $item = null; 
+            }
+            if ($sala === false) {
+                $sala = null; 
+            }
+            if ($bloco === false) {
+                $bloco = null; 
+            }
+            if ($maquina === false) {
+                $maquina = null; 
+            }
+            if($situacao === ""){
+                $situacao = null; 
+            }
+            if($classificacao === false){
+                $classificacao = null; 
+            }
+            if($dtinicio === ""){
+                $dtinicio = null; 
+            }
+            if($dtfinal === ""){
+                $dtfinal = null; 
+            }
+            if ($id === false) {
+                $id = null; 
+            }
 
-} catch (PDOException $erro) {
-    echo 'Erro DE CONEXÃO: ' . $erro->getMessage();
+            if($actionType === "buscar"){
+            $action = "Select_TbCha_Edit";
+            // Chamada da segunda procedure ComandosSmartFix.
+            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtSearch = $conn->prepare($sqlSearch);
+            
+            // var_dump($maq_num);
+            $stmtSearch->execute([
+                $action, $cha_id, $situacao, $dtfinal, null, null, null, null, null,
+                null, null, null, $bloco, $classificacao, $item, $maquina, $sala, null, null,$dtinicio
+            ]);
+
+            $searchResults = $stmtSearch->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
+            $stmtSearch->closeCursor();
+
+            echo json_encode(["SearchResults" => $searchResults]);
+        }
+        if($actionType === "atualizar"){
+            $action = "Update_TbCha";
+            // Chamada da segunda procedure ComandosSmartFix.
+            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $stmtSearch = $conn->prepare($sqlSearch);
+            
+            // var_dump($maq_num);
+            $stmtSearch->execute([
+                $action, $id, $situacao, $dtfinal, null, null, null, null, null,
+                null, null, null, $bloco, $classificacao, $item, $maquina, $sala, null, null,$dtinicio
+            ]);
+
+            $updateResults = $stmtSearch->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
+            $stmtSearch->closeCursor();
+
+            echo json_encode(["UpdateResults" => $updateResults]);
+        }
+        } else {
+            return;
+        }
+    } catch (PDOException $e) {
+        echo json_encode(["error" => $e->getMessage()]);
+    }
+} else {
+    echo json_encode(["error" => "Falha na conexão com o banco de dados."]);
 }
 ?>

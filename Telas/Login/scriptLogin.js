@@ -1,3 +1,7 @@
+window.onload = function () {
+    localStorage.removeItem("isLoggedIn");
+};
+
 async function fazerLogin(event) {
     event.preventDefault(); // Evita o recarregamento da página
 
@@ -17,8 +21,11 @@ async function fazerLogin(event) {
         const resultado = await resposta.json();
 
         if (resultado.sucesso) {
+            debugger;
+            localStorage.setItem("isLoggedIn", true);
             window.location.href = "../Home/home.html";
         } else {
+            localStorage.setItem("isLoggedIn", false);
             mensagem.textContent = resultado.erro;
             mensagem.style.color = "red";
         }

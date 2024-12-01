@@ -151,7 +151,7 @@ CREATE PROCEDURE ComandosSmartFix(
   IN P_cla_nome     VARCHAR(20),
   IN P_itm_nome     VARCHAR(20),
   IN P_Cha_assunto  VARCHAR(50),
-  IN P_maq_num      INT,
+  IN P_maq_num      VARCHAR(10),
   IN P_sl_num       INT,
   IN P_bl_nome      VARCHAR(20),
   IN P_Cha_desc     VARCHAR(300),
@@ -161,7 +161,8 @@ CREATE PROCEDURE ComandosSmartFix(
   IN P_Maq_id       INT,
   IN P_Sl_id        INT,
   IN P_bl_departamento VARCHAR(20),
-  IN P_user_email VARCHAR(100)
+  IN P_user_email VARCHAR(100),
+  IN P_Cha_dt_inicio DATE
 )
 BEGIN
 
@@ -169,13 +170,19 @@ BEGIN
   -- Actions referentes a tb_chamado
   
   IF Action = 'Update_TbCha' THEN
-
+	IF(select cha_sit from tb_chamado where cha_id= P_Cha_id) = (select "Finalizado") THEN
+		select "erro";
+	ELSE
     UPDATE tb_chamado
        SET cha_sit     = P_Cha_Sit,
-           cha_dt_fim  = P_Cha_dt_fim,
+           cha_dt_fim  = IFNULL(P_Cha_dt_fim, curdate()),
            cha_notes   = P_Cha_notes
      WHERE cha_id      = P_Cha_id;
+     
+     select * from tb_chamado where cha_id= P_Cha_id;
+     END IF;
   END IF;
+
 -- ----------------------------------------------    
 
   IF Action = 'Delete_TbCha' THEN
@@ -205,7 +212,81 @@ BEGIN
     SELECT * FROM tb_chamado
      WHERE cha_id = P_Cha_id;
   END IF;
+-- ----------------------------------------------   
+
 -- ----------------------------------------------    
+  IF Action = 'Select_TbCha' THEN
+    SELECT 
+		cha_id, 
+        cha_dt_inicio, 
+        cla_nome, 
+        cha_assunto,
+        itm_nome,
+        maq_num, 
+        sl_num, 
+        bl_nome,
+        cha_sit,
+        IFNULL(cha_dt_fim, "---") as cha_dt_fim
+        FROM tb_chamado
+	left join tb_bloco on
+		tb_bloco.bl_id = tb_chamado.bl_id
+	left join tb_sala on
+		tb_sala.sl_id = tb_chamado.sl_id
+	left join tb_maquina on
+		tb_maquina.maq_id = tb_chamado.maq_id
+	left join tb_classificacao on
+		tb_classificacao.cla_id = tb_chamado.cla_id
+	left join tb_itens on
+		tb_itens.itm_id = tb_chamado.itm_id 
+     WHERE (1=1)
+     AND ((P_Cha_id is null) or (cha_id = P_Cha_id))
+     AND ((P_Cl_id is null) or (tb_chamado.cla_id = P_Cl_id))
+     AND ((P_Bl_id is null) or (tb_chamado.bl_id = P_Bl_id))
+     AND ((P_Itm_id is null) or (tb_chamado.itm_id = P_Itm_id))
+     AND ((P_Sl_id is null) or (tb_chamado.sl_id = P_Sl_id))
+     AND ((P_Maq_id is null) or (tb_chamado.maq_id = P_Maq_id))
+     AND ((P_Cha_Sit is null) or (cha_sit like CONCAT('%', P_Cha_Sit, '%')))
+     AND ((P_Cha_dt_fim is null) or (cha_dt_fim = P_Cha_dt_fim))
+     AND ((P_Cha_dt_inicio is null) or (cha_dt_inicio = P_Cha_dt_inicio));
+  END IF;
+-- ----------------------------------------------   
+
+-- ----------------------------------------------    
+  IF Action = 'Select_TbCha_Edit' THEN
+    SELECT 
+		cha_id, 
+        cha_dt_inicio, 
+        cla_nome, 
+        cha_assunto,
+        itm_nome,
+        maq_num, 
+        sl_num, 
+        bl_nome,
+        cha_sit,
+        IFNULL(cha_dt_fim, "---") as cha_dt_fim
+        FROM tb_chamado
+	left join tb_bloco on
+		tb_bloco.bl_id = tb_chamado.bl_id
+	left join tb_sala on
+		tb_sala.sl_id = tb_chamado.sl_id
+	left join tb_maquina on
+		tb_maquina.maq_id = tb_chamado.maq_id
+	left join tb_classificacao on
+		tb_classificacao.cla_id = tb_chamado.cla_id
+	left join tb_itens on
+		tb_itens.itm_id = tb_chamado.itm_id 
+     WHERE (1=1)
+     AND ((P_Cha_id is null) or (cha_id = P_Cha_id))
+     AND ((P_Cl_id is null) or (tb_chamado.cla_id = P_Cl_id))
+     AND ((P_Bl_id is null) or (tb_chamado.bl_id = P_Bl_id))
+     AND ((P_Itm_id is null) or (tb_chamado.itm_id = P_Itm_id))
+     AND ((P_Sl_id is null) or (tb_chamado.sl_id = P_Sl_id))
+     AND ((P_Maq_id is null) or (tb_chamado.maq_id = P_Maq_id))
+     AND cha_sit <> "Finalizado"
+     AND ((P_Cha_dt_fim is null) or (cha_dt_fim = P_Cha_dt_fim))
+     AND ((P_Cha_dt_inicio is null) or (cha_dt_inicio = P_Cha_dt_inicio));
+  END IF;
+-- ----------------------------------------------   
 
   IF Action = 'SelectAll_TbCha' THEN
     
@@ -376,7 +457,6 @@ BEGIN
  IF NOT EXISTS(select * from tb_maquina where maq_num = P_maq_num and sl_id = P_Sl_id and bl_id = P_Bl_id) THEN
     INSERT INTO tb_maquina (maq_num, sl_id, bl_id)
          VALUES (P_maq_num, P_Sl_id, P_Bl_id);
-         
 	SET @P_maq_id = LAST_INSERT_ID();
     
 	select * from tb_maquina where maq_id = @P_maq_id;
@@ -480,6 +560,7 @@ BEGIN
 END $$
 
 DELIMITER ;
+
 
 DELIMITER $$
 create procedure DDL(

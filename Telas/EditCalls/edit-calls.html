@@ -9,63 +9,12 @@
             rel="stylesheet"
         />
         <link id="theme-style" rel="stylesheet" href="../../style.css" />
+        <link
+            href="https://fonts.googleapis.com/icon?family=Material+Icons"
+            rel="stylesheet"
+        />
         <script src="../../Components/scriptSideBar.js" defer></script>
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                fetch("editCalls.php")
-                    .then((response) => response.json())
-                    .then((data) => {
-                        let tableBody =
-                            document.getElementById("grid-chamados");
-                        data.forEach((resultado) => {
-                            let row = `<tr>
-                            <td>${resultado.cha_id}         </td>
-                            <td>${resultado.cha_dt_inicio}  </td>
-                            <td>${resultado.classificacao}  </td>
-                            <td>${resultado.cha_assunto}    </td>
-                            <td>${resultado.item}           </td>
-                            <td>${resultado.maquina}        </td>
-                            <td>${resultado.sala}           </td>
-                            <td>${resultado.bloco}          </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" value="${resultado.cha_sit} ">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="date" value="${resultado.cha_dt_fim}">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <input type="text" value="${resultado.cha_notes}">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="form-group">
-                                    <button 
-                                        type="button" 
-                                        class="btn" 
-                                        id="btnSalvar" 
-                                        onclick="window.location.href='atualizar.php'"
-                                        method="POST"
-                                    >                                      
-                                        Atualizar
-                                    </button>
-                                </div>
-                            </td>
-
-                            
-                        </tr>`;
-                            tableBody.innerHTML += row;
-                        });
-                    })
-                    .catch((error) =>
-                        console.error("Erro ao carregar os dados:", error)
-                    );
-            });
-        </script>
+        <script src="scriptEditCalls.js" defer></script>
     </head>
 
     <body>
@@ -81,59 +30,155 @@
                     <h1>Atualizar chamados</h1>
                 </div>
 
+                <div class="form-alert-success" style="display: none">
+                    <span
+                        class="closebtn"
+                        onclick="this.parentElement.style.display='none';"
+                        >&times;</span
+                    >
+                    Dados Inseridos com Sucesso!
+                </div>
+
+                <div class="form-alert" style="display: none">
+                    <span
+                        class="closebtn"
+                        onclick="this.parentElement.style.display='none';"
+                        >&times;</span
+                    >
+                    Verifique os Campos em Destaque!
+                </div>
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="ID">Nº Chamado</label>
-                        <input type="text" id="cha_id" />
+                        <input class="campos" type="number" id="cha_id" />
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="classificacao">Classificação</label>
+                        <select
+                            class="campos"
+                            name="classificacao"
+                            id="classificacao"
+                        >
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="departamento">Localização</label>
+                        <select
+                            name="bloco"
+                            id="bloco"
+                            class="campos"
+                            onchange="populateSalaDropdown(this.value)"
+                        >
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="departamento">Sala</label>
+                        <select
+                            class="campos"
+                            name="sala"
+                            id="sala"
+                            onchange="populateMaquinaDropdown(this.value)"
+                        >
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="departamento">Máquina</label>
+                        <select
+                            class="campos"
+                            name="maquina"
+                            id="maquina"
+                            disabled
+                        >
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="departamento">Item</label>
+                        <select class="campos" name="item" id="item">
+                            <option value=""></option>
+                        </select>
+                    </div>
+
+                    <div class="form-group div_campos">
+                        <label for="dtfinal">Data de Abertura</label>
+                        <input class="campos" type="date" id="dtinicio" />
                     </div>
 
                     <div class="form-group">
-                        <label for="classificacao">Classificação</label>
-                        <select name="classificacao" id="classificacao">
-                            <option value="" disabled selected>
-                                Classificação
-                            </option>
-                            <option value="Problema">Problema</option>
-                            <option value="Instalação">Instalacao</option>
-                            <option value="Melhoria">Melhoria</option>
-                            <option value="Outro">Outro</option>
-                        </select>
+                        <label for="dtinicio">Data de Finalização</label>
+                        <input class="campos" type="date" id="dtfinal" />
                     </div>
 
                     <div class="form-group">
                         <label for="situacao">Situação</label>
-                        <select name="situacao" id="situacao">
-                            <option value="" disabled selected>Situação</option>
-                            <option value="Aberto">Aberto</option>
-                            <option value="Em abdamento">Em Andamento</option>
+                        <select
+                            class="campos"
+                            name="situacao"
+                            id="situacao"
+                            onchange="onSituationChange(this.value)"
+                        >
+                            <option value="">Selecione a situação</option>
+                            <option value="Em Andamento">Em Andamento</option>
                             <option value="Finalizado">Finalizado</option>
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email">Data de Abertura</label>
-                        <input type="date" id="dtfinal" />
-                    </div>
-
-                    <div class="form-group">
-                        <label for="email">Data de Finalização</label>
-                        <input type="date" id="dtfinal" />
+                    <div style="display: none" class="form-group" id="notes">
+                        <label for="notes">Notas</label>
+                        <input class="campos" type="text" id="cha_notes" />
                     </div>
                 </div>
 
                 <div class="form-row">
                     <div class="serch-save-clear-group">
-                        <button type="button" class="btn" id="btnLimpar">
-                            <i class="fas fa-eraser"></i> Limpar
-                        </button>
                         <button type="button" class="btn" id="btnBuscar">
-                            <i class="fas fa-search"></i> Buscar
+                            <i class="fas fa-search"></i> Buscar Todos
+                        </button>
+                        <button type="button" class="btn" id="btnLimpar">
+                            <i class="fas fa-eraser"></i> Limpar Pesquisa
+                        </button>
+                        <button
+                            style="display: none"
+                            type="button"
+                            class="btn"
+                            id="btnAtualizar"
+                        >
+                            <i
+                                class="material-icons"
+                                style="vertical-align: middle"
+                                >sync</i
+                            >
+                            Atualizar Chamado
+                        </button>
+                        <button
+                            style="display: none"
+                            type="button"
+                            class="btn"
+                            id="btnVoltar"
+                        >
+                            <i
+                                class="material-icons"
+                                style="vertical-align: middle"
+                                >keyboard_return</i
+                            >
+                            Voltar a Consulta
                         </button>
                     </div>
                 </div>
 
                 <!-- Tabela de Chamados -->
                 <div class="table-container">
+                    <h2 style="margin-bottom: 1rem">Chamados</h2>
+
                     <table class="table">
                         <thead>
                             <tr>
@@ -142,15 +187,14 @@
                                 <th>Classificação</th>
                                 <th>Assunto</th>
                                 <th>Item</th>
-                                <th>Maq.nº</th>
-                                <th>Sl.nº</th>
-                                <th>Bl.nº</th>
+                                <th>Maquina</th>
+                                <th>Sala</th>
+                                <th>Localização</th>
                                 <th>Situação</th>
                                 <th>Dt.Finalização</th>
-                                <th>Anotações</th>
                             </tr>
                         </thead>
-                        <tbody id="grid-chamados"></tbody>
+                        <tbody id="tbody"></tbody>
                     </table>
                 </div>
             </div>

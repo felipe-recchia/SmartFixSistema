@@ -235,3 +235,10 @@ document.getElementById("bloco").addEventListener("change", function () {
     const input = document.getElementById("bloco");
     input.classList.remove("error");
 });
+
+window.onload = function () {
+    if (!localStorage.getItem("isLoggedIn")) {
+        debugger;
+        window.location.href = "../Login/index.html";
+    }
+};

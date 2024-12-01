@@ -1,3 +1,6 @@
+let selectedLinkContent = null;
+let initialFieldOrder = [];
+
 document.getElementById("btnLimpar").addEventListener("click", function () {
     // Seleciona todos os campos de entrada dentro do main-content
     const inputs = document.querySelectorAll(
@@ -25,8 +28,6 @@ document.getElementById("btnLimpar").addEventListener("click", function () {
         });
     }
 
-    document.getElementById("btnExportar").style.display = "none";
-
     const btnBuscarEvent = document.getElementById("btnBuscar");
 
     // Altera apenas o texto, mantendo o ícone
@@ -42,7 +43,7 @@ document.getElementById("btnLimpar").addEventListener("click", function () {
     select.disabled = true;
 });
 
-document.getElementById("btnBuscar").addEventListener("click", function () {
+function searchCalls() {
     debugger;
     let cha_id = parseInt(document.getElementById("cha_id").value);
     let classificacao = parseInt(
@@ -56,7 +57,7 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
     let dtfinal = document.getElementById("dtfinal").value;
     let situacao = document.getElementById("situacao").value;
 
-    fetch("ticketCalls.php", {
+    fetch("editCalls.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
@@ -103,24 +104,85 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
                         }
                         if (key === "cha_sit" && item[key] === "Em Andamento") {
-                            td.style.backgroundColor = "#fffdd0"; // Fundo verde claro.
-                            td.style.color = "#eead2d"; // Texto verde escuro.
+                            td.style.backgroundColor = "#fffdd0"; // Fundo amarelo claro.
+                            td.style.color = "#eead2d"; // Texto amarelo escuro.
                             td.style.padding = "5px 10px"; // Espaçamento interno.
                             td.style.borderRadius = "15px"; // Bordas arredondadas.
                             td.style.fontWeight = "bold"; // Texto em negrito.
                             td.style.minWidth = "60px"; // Define uma largura mínima para consistência.
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
+                            td.style.width = "50px";
                         }
-                        if (key === "cha_sit" && item[key] === "Finalizado") {
-                            td.style.backgroundColor = "#f8c3c0"; // Fundo verde claro.
-                            td.style.color = "#ff0000"; // Texto verde escuro.
-                            td.style.padding = "5px 10px"; // Espaçamento interno.
-                            td.style.borderRadius = "15px"; // Bordas arredondadas.
-                            td.style.fontWeight = "bold"; // Texto em negrito.
-                            td.style.minWidth = "60px"; // Define uma largura mínima para consistência.
-                            td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
+                        if (key === "cha_id") {
+                            // Substitua 'suaColunaEspecifica' pela chave da coluna desejada.
+                            let linkButton = document.createElement("a"); // Cria um elemento de link.
+                            linkButton.textContent = item[key]; // Texto do link.
+                            linkButton.href = "#";
+                            const savedTheme = localStorage.getItem("theme");
+                            if (savedTheme === "../../darkStyle.css") {
+                                linkButton.style.color = "white"; // Tema escuro
+                            } else {
+                                linkButton.style.color = "black"; // Tema claro
+                            }
+                            // linkButton.style.textDecoration = "none";
+                            linkButton.onclick = function (event) {
+                                event.preventDefault();
+                                selectedLinkContent = linkButton.textContent;
+
+                                document.getElementById(
+                                    "btnAtualizar"
+                                ).style.display = "inline-block";
+                                document.getElementById(
+                                    "btnVoltar"
+                                ).style.display = "inline-block";
+                                document.getElementById(
+                                    "btnBuscar"
+                                ).style.display = "none";
+                                document.getElementById(
+                                    "btnLimpar"
+                                ).style.display = "none";
+
+                                const campos =
+                                    document.querySelectorAll(".div_campos");
+                                campos.forEach((campo) => {
+                                    campo.style.display = "none";
+                                });
+
+                                document.getElementById("notes").style.display =
+                                    "inline-block";
+                                document.getElementById(
+                                    "cha_id"
+                                ).disabled = true;
+                                document.getElementById("cha_id").value =
+                                    item.cha_id;
+
+                                // Reordenar os campos
+                                const formRow =
+                                    document.querySelector(".form-row"); // Container dos campos
+
+                                // Selecionar os campos para reordenar
+                                const chaIdField = document
+                                    .getElementById("cha_id")
+                                    .closest(".form-group");
+                                const situacaoField = document
+                                    .getElementById("situacao")
+                                    .closest(".form-group");
+                                const dtFinalField = document
+                                    .getElementById("dtfinal")
+                                    .closest(".form-group");
+                                const notesField =
+                                    document.getElementById("notes");
+
+                                // Adicionar os campos na nova ordem
+                                formRow.appendChild(chaIdField);
+                                formRow.appendChild(situacaoField);
+                                formRow.appendChild(dtFinalField);
+                                formRow.appendChild(notesField);
+                            };
+                            td.appendChild(linkButton); // Adiciona o link à célula.
+                        } else {
+                            td.textContent = item[key];
                         }
-                        td.textContent = item[key];
                         tr.appendChild(td); // Adiciona a célula à linha.
                     }
                     tbody.appendChild(tr); // Adiciona a linha ao corpo da tabela.
@@ -131,9 +193,13 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
         .catch((error) => {
             console.error("Erro ao processar os dados:", error);
         });
+}
+
+document.getElementById("btnBuscar").addEventListener("click", function () {
+    searchCalls();
 });
 
-document.getElementById("btnExportar").addEventListener("click", function () {
+document.getElementById("btnAtualizar").addEventListener("click", function () {
     let cha_id = parseInt(document.getElementById("cha_id").value);
     let classificacao = parseInt(
         document.getElementById("classificacao").value
@@ -145,14 +211,18 @@ document.getElementById("btnExportar").addEventListener("click", function () {
     let dtinicio = document.getElementById("dtinicio").value;
     let dtfinal = document.getElementById("dtfinal").value;
     let situacao = document.getElementById("situacao").value;
+    let id = parseInt(selectedLinkContent);
 
-    fetch("ticketCalls.php", {
+    const input = document.getElementById("maquina");
+    let select = document.getElementById("bloco");
+
+    fetch("editCalls.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/x-www-form-urlencoded",
         },
         body: new URLSearchParams({
-            action: "buscar",
+            action: "atualizar",
             cha_id: cha_id,
             classificacao: classificacao,
             maquina: maquina,
@@ -162,6 +232,7 @@ document.getElementById("btnExportar").addEventListener("click", function () {
             dtinicio: dtinicio,
             dtfinal: dtfinal,
             situacao: situacao,
+            id: id,
         }),
     })
         .then((response) => {
@@ -173,37 +244,58 @@ document.getElementById("btnExportar").addEventListener("click", function () {
             return response.json();
         })
         .then((data) => {
-            if (data.SearchResults) {
-                //converte json para o formato de planilha e adiciona na constante "ws"
-                const ws = XLSX.utils.json_to_sheet(data.SearchResults);
-
-                //cria um webbook
-                const wb = XLSX.utils.book_new();
-                //cria uma nova folha de calculo com o nome "Chamados" e adiciona os resultados convertidos de "ws"
-                XLSX.utils.book_append_sheet(wb, ws, "Chamados");
-
-                // Gerar o arquivo Excel e baixa automatico
-                XLSX.writeFile(wb, "RelatorioChamados.xlsx");
+            if (data.UpdateResults[0].erro !== "erro") {
+                // Você pode manipular ou exibir esses dados conforme necessário.
+                searchCalls();
+                document.querySelector(".form-alert-success").style.display =
+                    "block";
+                document.getElementById("cha_id").value = NaN;
+                document.getElementById("situacao").value = "";
+                document.getElementById("cha_notes").value = "";
+                document.getElementById("dtfinal").value = "";
             } else {
-                alert("Nenhum dado encontrado.");
+                window.alert("Não é possivel atualizar um chamado Finalizado");
             }
+        })
+        .catch((error) => {
+            console.error("Erro ao processar os dados:", error);
         });
 });
 
-const campos = document.getElementsByClassName("campos");
+document.getElementById("btnVoltar").addEventListener("click", function () {
+    document.getElementById("btnAtualizar").style.display = "none";
+    document.getElementById("btnVoltar").style.display = "none";
+    document.getElementById("btnBuscar").style.display = "inline-block";
+    document.getElementById("btnLimpar").style.display = "inline-block";
 
-// Converte a coleção em um array para iterar e adicionar event listeners
-Array.from(campos).forEach((campo) => {
-    campo.addEventListener("change", function () {
-        debugger; // Para depuração
-        const btnBuscarEvent = document.getElementById("btnBuscar");
+    const inputs = document.querySelectorAll(
+        "#mainContent input[type='text'], #mainContent input[type='number'], #mainContent select, #mainContent textarea, #mainContent input[type='date']"
+    );
 
-        // Altera apenas o texto, mantendo o ícone
-        const icon = btnBuscarEvent.querySelector("i"); // Seleciona o ícone
-        const newText = "Buscar";
+    // Itera sobre os campos e limpa cada um deles
+    inputs.forEach(function (input) {
+        input.value = ""; // Limpa o valor dos campos de texto
+        if (input.type === "date") {
+            input.value = "yyyy-MM-dd";
+        }
+        if (input.tagName.toLowerCase() === "select") {
+            input.selectedIndex = 0; // Reseta o dropdown para a primeira opção
+        }
+    });
 
-        // Se o botão tem um ícone, ajusta o texto sem removê-lo
-        btnBuscarEvent.innerHTML = `${icon.outerHTML} ${newText}`;
+    const campos = document.querySelectorAll(".div_campos");
+    campos.forEach((campo) => {
+        campo.style.display = "inline-block";
+    });
+
+    document.getElementById("notes").style.display = "none";
+    document.getElementById("cha_id").disabled = false;
+
+    // Selecionar os campos para reordenar
+    // Reordenar os campos
+    const formRow = document.querySelector(".form-row"); // Container dos campos
+    initialFieldOrder.forEach((field) => {
+        formRow.appendChild(field); // Reanexa os campos na ordem original
     });
 });
 
@@ -364,11 +456,30 @@ function populateMaquinaDropdown(sala_id) {
         .catch((error) => console.error("Erro:", error));
 }
 
+function onSituationChange(situacao) {
+    let dtfinal = document.getElementById("dtfinal");
+    let notes = document.getElementById("cha_notes");
+
+    if (situacao === "Em Andamento") {
+        dtfinal.disabled = true;
+        notes.disabled = true;
+    } else if (situacao === "Finalizado") {
+        dtfinal.disabled = false;
+        notes.disabled = false;
+    } else if (situacao === "") {
+        dtfinal.disabled = false;
+        notes.disabled = false;
+    }
+}
+
 window.onload = function () {
     if (!localStorage.getItem("isLoggedIn")) {
         debugger;
         window.location.href = "../Login/index.html";
     }
+    const formRow = document.querySelector(".form-row");
+    initialFieldOrder = Array.from(formRow.children);
+    onSituationChange();
     populateBlNomeDropdown();
     populateSalaDropdown();
     populateClassificacaoDropdown();

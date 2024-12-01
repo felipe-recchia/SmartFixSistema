@@ -35,12 +35,12 @@ if ($conn) {
             if($actionType === "buscar"){
             $action = "Select_TbSal";
             // Chamada da segunda procedure ComandosSmartFix.
-            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlSearch = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtSearch = $conn->prepare($sqlSearch);
 
             $stmtSearch->execute([
                 $action, null, null, null, null, null, null, null, null,
-                $sl_num, null, null, $bl_id, null, null, null, null, null, null
+                $sl_num, null, null, $bl_id, null, null, null, null, null, null, null
             ]);
 
             $searchResults = $stmtSearch->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
@@ -49,12 +49,12 @@ if ($conn) {
             echo json_encode(["SearchResults" => $searchResults]);
         }elseif($actionType === "salvar"){
             $action = "Insert_TbSal";
-            $sqlSave = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlSave = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtSave = $conn->prepare($sqlSave);
 
             $stmtSave->execute([
                 $action, null, null, null, null, null, null, null, null,
-                $sl_num, null, null, $bl_id, null, null, null, null, null, null
+                $sl_num, null, null, $bl_id, null, null, null, null, null, null, null
             ]);
 
             $saveResults = $stmtSave->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
@@ -63,12 +63,12 @@ if ($conn) {
             echo json_encode(["SaveResults" => $saveResults]);
         }elseif($actionType === "atualizar"){
             $action = "Update_TbSal";
-            $sqlUpdate = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            $sqlUpdate = "CALL ComandosSmartFix(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
             $stmtUpdate = $conn->prepare($sqlUpdate);
 
             $stmtUpdate->execute([
                 $action, null, null, null, null, null, null, null, null,
-                $sl_num, null, null, $bl_id, null, null, null, $sl_id, null, null
+                $sl_num, null, null, $bl_id, null, null, null, $sl_id, null, null, null
             ]);
 
             $updateResults = $stmtUpdate->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.

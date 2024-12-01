@@ -177,6 +177,7 @@ document.getElementById("btnSalvar").addEventListener("click", function () {
                 return response.json();
             })
             .then((data) => {
+                debugger;
                 if (data.SaveResults[0].erro !== "erro") {
                     // Você pode manipular ou exibir esses dados conforme necessário.
 
@@ -373,6 +374,10 @@ function populateSalaDropdown(bloco_id) {
 }
 
 window.onload = function () {
+    if (!localStorage.getItem("isLoggedIn")) {
+        debugger;
+        window.location.href = "../Login/index.html";
+    }
     populateBlNomeDropdown();
     populateSalaDropdown();
 };
