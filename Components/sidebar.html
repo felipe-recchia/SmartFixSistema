@@ -18,17 +18,23 @@
         <i class="fas fa-cog"></i>
         <span>Atualizar Chamado</span>
     </a>
-
+    
     <div class="menu-item has-submenu">
         <i class="fas fa-pen"></i>
         <span id="cadastro-toggle">Cadastro</span>
         <i class="fas fa-chevron-down" id="dropdown-icon" style="margin-left: auto;"></i>
         <div class="submenu" id="submenu">
-            <a href="../ClassRegister/class-register.html">Cadastro de Sala</a>
             <a href="../BlockRegister/block-register.html">Cadastro de Localização</a>
+            <a href="../ClassRegister/class-register.html">Cadastro de Sala</a>
             <a href="../MachineRegister/machine-register.html">Cadastro de Máquina</a>
         </div>
     </div>
+
+    <a href="../Help/help.html" class="menu-item">
+        <i class="fa fa-question-circle"></i>
+        <span>Suporte</span>
+    </a>
+
     <div class="menu-item">
     <!-- <input id="switch-theme-btn" type="checkbox"> -->
     <label class="switch">
@@ -45,8 +51,9 @@
           <div class="star star5"></div>
         </div>
       </label>
-      <span>Modo Escuro</span>
+      <span>ﾠModo Escuro</span>
     </div>
+
     <a href="../Login/index.html" class="menu-item" onclick="localStorage.removeItem('isLoggedIn')">
         <i class="fa fa-power-off"></i>
         <span>Sair</span>

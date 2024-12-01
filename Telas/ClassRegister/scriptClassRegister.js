@@ -36,7 +36,7 @@ document.getElementById("btnLimpar").addEventListener("click", function () {
 });
 
 document.getElementById("btnBuscar").addEventListener("click", function () {
-    let sala = parseInt(document.getElementById("sala").value); // Campo de texto.
+    let sala = document.getElementById("sala").value; // Campo de texto.
     let bloco = parseInt(document.getElementById("bloco").value);
 
     fetch("classRegister.php", {
@@ -82,9 +82,21 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                             linkButton.href = "#";
                             const savedTheme = localStorage.getItem("theme");
                             if (savedTheme === "../../darkStyle.css") {
-                                linkButton.style.color = "white"; // Tema escuro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             } else {
-                                linkButton.style.color = "black"; // Tema claro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             }
                             // linkButton.style.textDecoration = "none";
                             linkButton.onclick = function (event) {
@@ -118,22 +130,22 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
 });
 
 document.getElementById("btnSalvar").addEventListener("click", function () {
-    let sala = parseInt(document.getElementById("sala").value); // Campo de texto.
+    let sala = document.getElementById("sala").value; // Campo de texto.
     let bloco = parseInt(document.getElementById("bloco").value);
     const input = document.getElementById("sala");
     const select = document.getElementById("bloco");
 
-    if (isNaN(sala) && !isNaN(bloco)) {
+    if (sala == "" && !isNaN(bloco)) {
         document.querySelector(".form-alert").style.display = "block";
         input.classList.add("error");
-    } else if (isNaN(bloco) && !isNaN(sala)) {
+    } else if (isNaN(bloco) && !sala == "") {
         document.querySelector(".form-alert").style.display = "block";
         select.classList.add("error");
-    } else if (isNaN(bloco) && isNaN(sala)) {
+    } else if (isNaN(bloco) && sala == "") {
         document.querySelector(".form-alert").style.display = "block";
         input.classList.add("error");
         select.classList.add("error");
-    } else if (!isNaN(sala) && !isNaN(bloco)) {
+    } else if (!sala == "" && !isNaN(bloco)) {
         fetch("classRegister.php", {
             method: "POST",
             headers: {
@@ -188,24 +200,22 @@ document.getElementById("btnSalvar").addEventListener("click", function () {
 });
 
 document.getElementById("btnAtualizar").addEventListener("click", function () {
-    let sala = parseInt(document.getElementById("sala").value); // Campo de texto.
+    let sala = document.getElementById("sala").value; // Campo de texto.
     let bloco = parseInt(document.getElementById("bloco").value);
-    let id = parseInt(selectedLinkContent);
-
     const input = document.getElementById("sala");
     const select = document.getElementById("bloco");
 
-    if (isNaN(sala) && !isNaN(bloco)) {
+    if (sala == "" && !isNaN(bloco)) {
         document.querySelector(".form-alert").style.display = "block";
         input.classList.add("error");
-    } else if (isNaN(bloco) && !isNaN(sala)) {
+    } else if (isNaN(bloco) && !sala == "") {
         document.querySelector(".form-alert").style.display = "block";
         select.classList.add("error");
-    } else if (isNaN(bloco) && isNaN(sala)) {
+    } else if (isNaN(bloco) && sala == "") {
         document.querySelector(".form-alert").style.display = "block";
         input.classList.add("error");
         select.classList.add("error");
-    } else if (!isNaN(sala) && !isNaN(bloco)) {
+    } else if (!sala == "" && !isNaN(bloco)) {
         fetch("classRegister.php", {
             method: "POST",
             headers: {

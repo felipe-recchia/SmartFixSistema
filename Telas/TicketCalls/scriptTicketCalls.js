@@ -94,8 +94,8 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                     for (let key in item) {
                         let td = document.createElement("td");
                         if (key === "cha_sit" && item[key] === "Aberto") {
-                            td.style.backgroundColor = "#d4edda"; // Fundo verde claro.
-                            td.style.color = "#155724"; // Texto verde escuro.
+                            td.style.backgroundColor = "#f8c3c0"; // Fundo verde claro.
+                            td.style.color = "#ff0000"; // Texto verde escuro.
                             td.style.padding = "5px 10px"; // Espaçamento interno.
                             td.style.borderRadius = "15px"; // Bordas arredondadas.
                             td.style.fontWeight = "bold"; // Texto em negrito.
@@ -112,8 +112,8 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
                         }
                         if (key === "cha_sit" && item[key] === "Finalizado") {
-                            td.style.backgroundColor = "#f8c3c0"; // Fundo verde claro.
-                            td.style.color = "#ff0000"; // Texto verde escuro.
+                            td.style.backgroundColor = "#d4edda"; // Fundo verde claro.
+                            td.style.color = "#155724"; // Texto verde escuro.
                             td.style.padding = "5px 10px"; // Espaçamento interno.
                             td.style.borderRadius = "15px"; // Bordas arredondadas.
                             td.style.fontWeight = "bold"; // Texto em negrito.

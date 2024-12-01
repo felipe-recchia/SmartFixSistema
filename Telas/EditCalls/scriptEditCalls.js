@@ -95,8 +95,8 @@ function searchCalls() {
                     for (let key in item) {
                         let td = document.createElement("td");
                         if (key === "cha_sit" && item[key] === "Aberto") {
-                            td.style.backgroundColor = "#d4edda"; // Fundo verde claro.
-                            td.style.color = "#155724"; // Texto verde escuro.
+                            td.style.backgroundColor = "#f8c3c0"; // Fundo verde claro.
+                            td.style.color = "#ff0000"; // Texto verde escuro.
                             td.style.padding = "5px 10px"; // Espaçamento interno.
                             td.style.borderRadius = "15px"; // Bordas arredondadas.
                             td.style.fontWeight = "bold"; // Texto em negrito.
@@ -104,14 +104,13 @@ function searchCalls() {
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
                         }
                         if (key === "cha_sit" && item[key] === "Em Andamento") {
-                            td.style.backgroundColor = "#fffdd0"; // Fundo amarelo claro.
-                            td.style.color = "#eead2d"; // Texto amarelo escuro.
+                            td.style.backgroundColor = "#fffdd0"; // Fundo verde claro.
+                            td.style.color = "#eead2d"; // Texto verde escuro.
                             td.style.padding = "5px 10px"; // Espaçamento interno.
                             td.style.borderRadius = "15px"; // Bordas arredondadas.
                             td.style.fontWeight = "bold"; // Texto em negrito.
                             td.style.minWidth = "60px"; // Define uma largura mínima para consistência.
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
-                            td.style.width = "50px";
                         }
                         if (key === "cha_id") {
                             // Substitua 'suaColunaEspecifica' pela chave da coluna desejada.
@@ -120,9 +119,21 @@ function searchCalls() {
                             linkButton.href = "#";
                             const savedTheme = localStorage.getItem("theme");
                             if (savedTheme === "../../darkStyle.css") {
-                                linkButton.style.color = "white"; // Tema escuro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             } else {
-                                linkButton.style.color = "black"; // Tema claro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             }
                             // linkButton.style.textDecoration = "none";
                             linkButton.onclick = function (event) {
@@ -462,7 +473,6 @@ function onSituationChange(situacao) {
 
     if (situacao === "Em Andamento") {
         dtfinal.disabled = true;
-        notes.disabled = true;
     } else if (situacao === "Finalizado") {
         dtfinal.disabled = false;
         notes.disabled = false;

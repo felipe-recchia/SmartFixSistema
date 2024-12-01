@@ -18,11 +18,11 @@ if ($conn) {
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['sala'], $_POST['bloco'], $_POST['action'])) {
             $actionType = $_POST['action'];
 
-            $sl_num = filter_var($_POST['sala'] ?? null, FILTER_VALIDATE_INT);  
+            $sl_num = filter_var($_POST['sala'] ?? null, FILTER_SANITIZE_STRING);  
             $bl_id = filter_var($_POST['bloco'] ?? null, FILTER_VALIDATE_INT);
             $sl_id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
 
-            if ($sl_num === false) {
+            if ($sl_num === "") {
                 $sl_num = null; 
             }
             if ($bl_id === false) {

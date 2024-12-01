@@ -70,7 +70,7 @@ function updateLinksColor() {
         if (savedTheme === "../../darkStyle.css") {
             link.style.color = "white"; // Tema escuro
         } else {
-            link.style.color = "black"; // Tema claro
+            link.style.color = "white"; // Tema claro
         }
     });
 }

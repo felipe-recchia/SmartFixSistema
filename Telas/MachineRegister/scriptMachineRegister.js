@@ -89,9 +89,21 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                             linkButton.href = "#";
                             const savedTheme = localStorage.getItem("theme");
                             if (savedTheme === "../../darkStyle.css") {
-                                linkButton.style.color = "white"; // Tema escuro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             } else {
-                                linkButton.style.color = "black"; // Tema claro
+                                linkButton.style.backgroundColor = "#2563eb";
+                                linkButton.style.padding = "5px 10px";
+                                linkButton.style.borderRadius = "15px";
+                                linkButton.style.fontWeight = "bold";
+                                linkButton.style.minWidth = "60px";
+                                linkButton.style.whiteSpace = "nowrap";
+                                linkButton.style.color = "white";
                             }
                             // linkButton.style.textDecoration = "none";
                             linkButton.onclick = function (event) {
