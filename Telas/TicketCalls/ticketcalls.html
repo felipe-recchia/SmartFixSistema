@@ -18,6 +18,17 @@
     </head>
 
     <body>
+        <div id="dialogOverlay" class="dialog-overlay">
+            <div class="dialog">
+                <h2 style="color: rgb(29, 27, 27)">Notas</h2>
+                <span id="notasTextarea" style="color: rgb(34, 47, 71)"></span>
+                <div class="dialog-buttons">
+                    <button onclick="fecharDialogo()" class="btn btn-primary">
+                        Fechar
+                    </button>
+                </div>
+            </div>
+        </div>
         <!--LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
         <div id="sidebar-container"></div>
         <!--FIM - LeonardoSarruf - 02/11/2024 - Carrega sidebar.html via script.js -->
@@ -140,6 +151,7 @@
                             <th>Localização</th>
                             <th>Situação</th>
                             <th>Dt.Finalização</th>
+                            <th>Notas</th>
                         </tr>
                     </thead>
 

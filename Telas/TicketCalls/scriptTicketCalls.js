@@ -120,9 +120,20 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
                             td.style.minWidth = "60px"; // Define uma largura mínima para consistência.
                             td.style.whiteSpace = "nowrap"; // Evita quebra de linha.
                         }
+                        if (key === "cha_notes" && item[key] !== null) {
+                            let notasTd = document.createElement("td");
+                            let notasButton = document.createElement("button");
+                            notasButton.textContent = "Notas";
+                            notasButton.className = "btn btn-primary";
+                            notasButton.onclick = () => abrirDialogo(item[key]);
+                            notasTd.appendChild(notasButton);
+                            tr.appendChild(notasTd);
+                            td.style.display = "none";
+                        }
                         td.textContent = item[key];
                         tr.appendChild(td); // Adiciona a célula à linha.
                     }
+
                     tbody.appendChild(tr); // Adiciona a linha ao corpo da tabela.
                 });
                 document.getElementById("btnExportar").style.display = "block";
@@ -362,6 +373,18 @@ function populateMaquinaDropdown(sala_id) {
             });
         })
         .catch((error) => console.error("Erro:", error));
+}
+
+function abrirDialogo(item) {
+    const overlay = document.getElementById("dialogOverlay");
+    const textarea = document.getElementById("notasTextarea");
+    overlay.style.display = "flex"; // Exibe o modal
+    textarea.textContent = item; // Opcional: Preencha com notas associadas ao item
+}
+
+function fecharDialogo() {
+    const overlay = document.getElementById("dialogOverlay");
+    overlay.style.display = "none"; // Esconde o modal
 }
 
 window.onload = function () {

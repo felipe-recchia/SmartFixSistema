@@ -184,6 +184,7 @@ BEGIN
 				cha_dt_fim  = IFNULL(P_Cha_dt_fim, curdate()),
 				cha_notes   = P_Cha_notes
 			WHERE cha_id    = P_Cha_id;
+		select * from tb_chamado where cha_id= P_Cha_id;
 		ELSE
 		UPDATE tb_chamado
 			SET cha_sit     = P_Cha_Sit,
@@ -237,7 +238,8 @@ BEGIN
         sl_num, 
         bl_nome,
         cha_sit,
-        IFNULL(cha_dt_fim, "---") as cha_dt_fim
+        IFNULL(cha_dt_fim, "---") as cha_dt_fim,
+        cha_notes
         FROM tb_chamado
 	left join tb_bloco on
 		tb_bloco.bl_id = tb_chamado.bl_id
@@ -571,6 +573,7 @@ BEGIN
 END $$
 
 DELIMITER ;
+
 
 
 DELIMITER $$
