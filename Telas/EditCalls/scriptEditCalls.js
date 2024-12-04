@@ -56,6 +56,7 @@ function searchCalls() {
     let dtinicio = document.getElementById("dtinicio").value;
     let dtfinal = document.getElementById("dtfinal").value;
     let situacao = document.getElementById("situacao").value;
+    let cha_notes = document.getElementById("cha_notes").value;
 
     fetch("editCalls.php", {
         method: "POST",
@@ -73,6 +74,7 @@ function searchCalls() {
             dtinicio: dtinicio,
             dtfinal: dtfinal,
             situacao: situacao,
+            cha_notes: cha_notes,
         }),
     })
         .then((response) => {
@@ -223,6 +225,7 @@ document.getElementById("btnAtualizar").addEventListener("click", function () {
     let dtfinal = document.getElementById("dtfinal").value;
     let situacao = document.getElementById("situacao").value;
     let id = parseInt(selectedLinkContent);
+    let cha_notes = document.getElementById("cha_notes").value;
 
     const input = document.getElementById("maquina");
     let select = document.getElementById("bloco");
@@ -243,6 +246,7 @@ document.getElementById("btnAtualizar").addEventListener("click", function () {
             dtinicio: dtinicio,
             dtfinal: dtfinal,
             situacao: situacao,
+            cha_notes: cha_notes,
             id: id,
         }),
     })
@@ -255,6 +259,7 @@ document.getElementById("btnAtualizar").addEventListener("click", function () {
             return response.json();
         })
         .then((data) => {
+            debugger;
             if (data.UpdateResults[0].erro !== "erro") {
                 // Você pode manipular ou exibir esses dados conforme necessário.
                 searchCalls();

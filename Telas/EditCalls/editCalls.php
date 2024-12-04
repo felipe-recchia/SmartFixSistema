@@ -6,7 +6,7 @@ $conn = $conexao->conectar(); // Estabelece a conexão.
 
 if ($conn) {
     try {
-        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['classificacao'],$_POST['cha_id'],$_POST['maquina'],$_POST['sala'], $_POST['bloco'], $_POST['action'], $_POST['item'], $_POST['dtinicio'], $_POST['dtfinal'], $_POST['situacao'])) {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['classificacao'],$_POST['cha_id'],$_POST['maquina'],$_POST['sala'], $_POST['bloco'], $_POST['action'], $_POST['item'], $_POST['dtinicio'], $_POST['dtfinal'], $_POST['situacao'], $_POST['cha_notes'])) {
             $actionType = $_POST['action'];
             
 
@@ -19,6 +19,7 @@ if ($conn) {
             $dtinicio = filter_var($_POST['dtinicio'] ?? null, FILTER_SANITIZE_STRING);
             $dtfinal = filter_var($_POST['dtfinal'] ?? null, FILTER_SANITIZE_STRING);
             $situacao = filter_var($_POST['situacao'] ?? null, FILTER_SANITIZE_STRING);
+            $cha_notes = filter_var($_POST['cha_notes'] ?? null, FILTER_SANITIZE_STRING);
             $id = filter_var($_POST['id'] ?? null, FILTER_VALIDATE_INT);
 
             if ($cha_id === false) {
@@ -51,6 +52,9 @@ if ($conn) {
             if ($id === false) {
                 $id = null; 
             }
+            if ($cha_notes === false) {
+                $cha_notes = null; 
+            }
 
             if($actionType === "buscar"){
             $action = "Select_TbCha_Edit";
@@ -77,7 +81,7 @@ if ($conn) {
             
             // var_dump($maq_num);
             $stmtSearch->execute([
-                $action, $id, $situacao, $dtfinal, null, null, null, null, null,
+                $action, $id, $situacao, $dtfinal, $cha_notes, null, null, null, null,
                 null, null, null, $bloco, $classificacao, $item, $maquina, $sala, null, null,$dtinicio
             ]);
 
