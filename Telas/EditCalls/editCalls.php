@@ -113,19 +113,19 @@ if ($conn) {
                 if ($situacao === "Finalizado") {
                     $message = "<html><body>" .
                                "<p>Olá!</p></br>" .
-                               "<p>Seu chamado: $assunto, foi atualizado com as seguintes informações:</p>" .
-                               "<p>Situação: $situacao</p>" .
-                               "<p>Data de finalização: $dtfinal</p>" .
-                               "<p>Notas do técnico: $cha_notes</p>" .
+                               "<p>Seu chamado:<strong> $assunto </strong>, foi atualizado com as seguintes informações:</p>" .
+                               "<p>Situação:<strong> $situacao </strong></p>" .
+                               "<p>Data de finalização:<strong> $dtfinal </strong></p>" .
+                               "<p>Notas do técnico:<strong> $cha_notes </strong></p>" .
                                "<p>Atenciosamente,</br>Equipe SmartFix</p>" .
                                "<img src='cid:image1' />" .
                                "</body></html>";
                 } else {
                     $message = "<html><body>" .
                                "<p>Olá!</p></br>" .
-                               "<p>Seu chamado: $assunto, foi atualizado com as seguintes informações:</p>" .
-                               "<p>Situação: $situacao</p>" .
-                               "<p>Notas do técnico: $cha_notes</p>" .
+                               "<p>Seu chamado:<strong> $assunto </strong>, foi atualizado com as seguintes informações:</p>" .
+                               "<p>Situação:<strong> $situacao </strong></p>" .
+                               "<p>Notas do técnico:<strong> $cha_notes </strong></p>" .
                                "<p>Atenciosamente,</br>Equipe SmartFix</p>" .
                                "<img src='cid:image1' />" .
                                "</body></html>";
