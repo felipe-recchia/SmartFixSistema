@@ -1,3 +1,13 @@
+// Criar uma nova data para hoje
+const today = new Date();
+
+today.setHours(0, 0, 0, 0); // Zerando as horas, minutos, segundos e milissegundos (fuso)
+
+// Converter a data para o formato YYYY-MM-DD
+const maxDate = today.toISOString().split("T")[0];
+
+document.getElementById("dtfinal").setAttribute("max", maxDate);
+
 let selectedLinkContent = null;
 let initialFieldOrder = [];
 
@@ -27,15 +37,6 @@ document.getElementById("btnLimpar").addEventListener("click", function () {
             row.remove(); // Remove cada linha <tr>
         });
     }
-
-    const btnBuscarEvent = document.getElementById("btnBuscar");
-
-    // Altera apenas o texto, mantendo o ícone
-    const icon = btnBuscarEvent.querySelector("i"); // Seleciona o ícone
-    const newText = "Buscar Todos";
-
-    // Se o botão tem um ícone, ajusta o texto sem removê-lo
-    btnBuscarEvent.innerHTML = `${icon.outerHTML} ${newText}`;
 
     let select = document.getElementById("sala");
     select.disabled = true;
@@ -213,6 +214,7 @@ document.getElementById("btnBuscar").addEventListener("click", function () {
 });
 
 document.getElementById("btnAtualizar").addEventListener("click", function () {
+    document.getElementById("loading-screen").style.display = "flex";
     let cha_id = parseInt(document.getElementById("cha_id").value);
     let classificacao = parseInt(
         document.getElementById("classificacao").value
@@ -275,6 +277,10 @@ document.getElementById("btnAtualizar").addEventListener("click", function () {
         })
         .catch((error) => {
             console.error("Erro ao processar os dados:", error);
+        })
+        .finally(() => {
+            // Esconder o loading após a resposta
+            document.getElementById("loading-screen").style.display = "none";
         });
 });
 

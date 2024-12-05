@@ -88,6 +88,76 @@ if ($conn) {
             $updateResults = $stmtSearch->fetchAll(PDO::FETCH_ASSOC); // Obtém os resultados.
             $stmtSearch->closeCursor();
 
+            // Buscar e-mail relacionado ao chamado
+            $sqlEmail = "SELECT user_email, cha_assunto FROM tb_usuario left join tb_chamado on tb_chamado.cha_id = tb_usuario.cha_id WHERE tb_usuario.cha_id = ?";
+            $stmtEmail = $conn->prepare($sqlEmail);
+            $stmtEmail->execute([$id]);
+            $emailResult = $stmtEmail->fetch(PDO::FETCH_ASSOC);
+
+            if ($emailResult) {
+            $email = $emailResult["user_email"];
+            $assunto = $emailResult["cha_assunto"];
+
+            if($email != null){
+
+                $to = $email;
+                $subject = "Atualização de Chamado com ID: #$id";
+                
+                // Definindo a imagem (o caminho da imagem ou a imagem em base64)
+                $imagePath = '../../Img/LogoCompleta2.png'; // ou a URL da imagem
+                $imageData = base64_encode(file_get_contents($imagePath));
+                $imageType = pathinfo($imagePath, PATHINFO_EXTENSION);
+                $imageName = basename($imagePath);
+                
+                // Definindo o conteúdo do e-mail
+                if ($situacao === "Finalizado") {
+                    $message = "<html><body>" .
+                               "<p>Olá!</p></br>" .
+                               "<p>Seu chamado: $assunto, foi atualizado com as seguintes informações:</p>" .
+                               "<p>Situação: $situacao</p>" .
+                               "<p>Data de finalização: $dtfinal</p>" .
+                               "<p>Notas do técnico: $cha_notes</p>" .
+                               "<p>Atenciosamente,</br>Equipe SmartFix</p>" .
+                               "<img src='cid:image1' />" .
+                               "</body></html>";
+                } else {
+                    $message = "<html><body>" .
+                               "<p>Olá!</p></br>" .
+                               "<p>Seu chamado: $assunto, foi atualizado com as seguintes informações:</p>" .
+                               "<p>Situação: $situacao</p>" .
+                               "<p>Notas do técnico: $cha_notes</p>" .
+                               "<p>Atenciosamente,</br>Equipe SmartFix</p>" .
+                               "<img src='cid:image1' />" .
+                               "</body></html>";
+                }
+                
+                // Definindo o cabeçalho do e-mail com MIME type multipart/related
+                $boundary = md5(uniqid(time()));
+                
+                // Cabeçalhos para o envio do e-mail com conteúdo misto
+                $headers = "From: smartfixsuporte07@gmail.com\r\n" .
+                           "Reply-To: smartfixsuporte07@gmail.com\r\n" .
+                           "MIME-Version: 1.0\r\n" .
+                           "Content-Type: multipart/related; boundary=\"$boundary\"\r\n";
+                
+                // Corpo do e-mail com a imagem embutida
+                $body = "--$boundary\r\n" .
+                        "Content-Type: text/html; charset=UTF-8\r\n" .
+                        "Content-Transfer-Encoding: 7bit\r\n\r\n" .
+                        $message . "\r\n" .
+                        "--$boundary\r\n" .
+                        "Content-Type: image/$imageType; name=\"$imageName\"\r\n" .
+                        "Content-Transfer-Encoding: base64\r\n" .
+                        "Content-ID: <image1>\r\n\r\n" .
+                        $imageData . "\r\n" .
+                        "--$boundary--";
+                
+                // Enviar o e-mail
+                mail($to, $subject, $body, $headers);
+        }
+
+            $stmtEmail->closeCursor();
+        }
             echo json_encode(["UpdateResults" => $updateResults]);
         }
         } else {
